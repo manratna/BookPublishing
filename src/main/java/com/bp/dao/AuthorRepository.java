@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.bp.dao.entity.Author;
+import com.bp.dao.entity.TitleAuthor;
 
 public interface AuthorRepository extends JpaRepository<Author, Long> {
 
@@ -20,5 +21,5 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
 
     List<Author> findByCity(String city);
 
-    // Additional custom queries can be added here if needed
+	List<Author> findByFirstNameOrLastName(String firstName, String lastName);
 }

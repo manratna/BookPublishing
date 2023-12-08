@@ -1,5 +1,5 @@
 package com.bp.service;
-
+ 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -13,13 +13,13 @@ import com.bp.dao.entity.Publisher;
 import com.bp.dao.entity.Title;
 import com.bp.model.PublisherDTO;
 import com.bp.model.TitleDTO;
-
+ 
 @Service
 public class TitleServiceImpl implements TitleService {
-
+ 
 	@Autowired
     private TitleRepository titleRepository;
-
+ 
     @Override
     public String addNewTitle(TitleDTO titleDTO) {
         Title title = new Title();
@@ -35,7 +35,7 @@ public class TitleServiceImpl implements TitleService {
             return "Error Creating Record";
         }
     }
-
+ 
     @Override
     public List<TitleDTO> getAllTitles() {
         List<TitleDTO> titleDTOs = titleRepository.findAll().stream()
@@ -43,13 +43,13 @@ public class TitleServiceImpl implements TitleService {
                 .collect(Collectors.toList());
         return titleDTOs;
     }
-
+ 
     @Override
     public TitleDTO searchTitleByTitle(String title) {
         Title foundTitle = titleRepository.findByTitle(title);
         return (foundTitle != null) ? convertToDTO(foundTitle) : null;
     }
-
+ 
     @Override
     public List<TitleDTO> searchTitlesByType(String type) {
         List<Title> titles = titleRepository.findByType(type);
@@ -57,7 +57,7 @@ public class TitleServiceImpl implements TitleService {
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
-
+ 
     @Override
     public List<TitleDTO> searchTitlesByPubId(Long pubId) {
         List<Title> titles = titleRepository.findByPublisherId(pubId);
@@ -65,7 +65,7 @@ public class TitleServiceImpl implements TitleService {
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
-
+ 
     @Override
     public List<TitleDTO> searchTitlesByPubDate(String pubDate) {
         List<Title> titles = titleRepository.findByPubdate(pubDate);
@@ -73,7 +73,7 @@ public class TitleServiceImpl implements TitleService {
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
-
+ 
     @Override
     public List<TitleDTO> searchTop5TitlesByYtd() {
         List<Title> titles = titleRepository.findTop5ByOrderByYtdSalesDesc();
@@ -81,7 +81,7 @@ public class TitleServiceImpl implements TitleService {
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
-
+ 
     @Override
     public TitleDTO updateAllTitleDetails(Long id, TitleDTO titleDTO) {
         Optional<Title> titleOptional = titleRepository.findById(id);
@@ -101,7 +101,7 @@ public class TitleServiceImpl implements TitleService {
         }
         return null;
     }
-
+ 
     @Override
     public TitleDTO updateSpecificTitleDetails(Long id, TitleDTO titleDTO) {
         Optional<Title> titleOptional = titleRepository.findById(id);
@@ -121,7 +121,7 @@ public class TitleServiceImpl implements TitleService {
         }
         return null;
     }
-
+ 
     private TitleDTO convertToDTO(Title title) {
         TitleDTO titleDTO = new TitleDTO();
         try {

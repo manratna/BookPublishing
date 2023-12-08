@@ -2,6 +2,7 @@
 
 package com.bp.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,7 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bp.dao.AuthorRepository;
+import com.bp.dao.TitleAuthorRepository;
 import com.bp.dao.entity.Author;
+import com.bp.dao.entity.Title;
+import com.bp.dao.entity.TitleAuthor;
 import com.bp.model.AuthorDTO;
 
 @Service
@@ -18,6 +22,9 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Autowired
     private AuthorRepository authorRepository;
+
+    @Autowired
+    private TitleAuthorRepository titleAuthorRepository;
 
     @Override
     public String addAuthor(AuthorDTO authorDTO) {
@@ -76,15 +83,10 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public void partialUpdateAuthor(Long id, AuthorDTO authorDTO) {
-        Author existingAuthor = authorRepository.findById(id)
+    	Author existingAuthor = authorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Author not found with id: " + id));
 
-        // Implement partial update logic here, e.g., update only non-null properties
-        if (authorDTO.getLastName() != null) {
-            existingAuthor.setLastName(authorDTO.getLastName());
-        }
-        // Add similar logic for other properties
-
+        BeanUtils.copyProperties(authorDTO, existingAuthor);
         authorRepository.save(existingAuthor);
     }
 
@@ -95,6 +97,20 @@ public class AuthorServiceImpl implements AuthorService {
 
         BeanUtils.copyProperties(authorDTO, existingAuthor);
         authorRepository.save(existingAuthor);
+    }
+
+    @Override
+    public List<Title> getTitlesByAuthorName(String name) {
+        List<Author> authors = authorRepository.findByFirstNameOrLastName(name, name);
+        List<TitleAuthor> titleAuthors = new ArrayList<>();
+        for (Author author : authors) {
+        	titleAuthors.addAll(titleAuthorRepository.findByAuthor(author));
+		}
+        List<Title> titles = new ArrayList<>();
+        for (TitleAuthor titleAuthor : titleAuthors) {
+			titles.add(titleAuthor.getTitle());
+		}
+        return titles;
     }
 
     private AuthorDTO convertToDTO(Author author) {

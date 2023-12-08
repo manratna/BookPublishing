@@ -1,8 +1,10 @@
 package com.bp.controller;
-
+ 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,58 +16,67 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bp.model.TitleDTO;
 import com.bp.service.TitleService;
-
+ 
 @RestController
 @RequestMapping("/api/titles")
 public class TitleController {
-
+ 
 	@Autowired
     private TitleService titleService;
-
-
+ 
+ 
     @PostMapping("/post")
-    public String addNewTitle(@RequestBody TitleDTO titleDTO) {
-        return titleService.addNewTitle(titleDTO);
+    public ResponseEntity<String> addNewTitle(@RequestBody TitleDTO titleDTO) {
+        String addNewTitle = titleService.addNewTitle(titleDTO);
+		return new ResponseEntity<String>(addNewTitle, HttpStatus.CREATED);
     }
-
+ 
     @GetMapping
-    public List<TitleDTO> getAllTitles() {
-        return titleService.getAllTitles();
+    public ResponseEntity<List<TitleDTO>> getAllTitles() {
+        List<TitleDTO> allTitles = titleService.getAllTitles();
+		return new ResponseEntity<>(allTitles,HttpStatus.OK);
     }
-
+ 
     @GetMapping("/title/{title}")
-    public TitleDTO searchTitleByTitle(@PathVariable String title) {
-        return titleService.searchTitleByTitle(title);
+    public ResponseEntity<TitleDTO> searchTitleByTitle(@PathVariable String title) {
+        TitleDTO searchTitleByTitle = titleService.searchTitleByTitle(title);
+		return new ResponseEntity<TitleDTO>(searchTitleByTitle, HttpStatus.OK);
     }
-
+ 
     @GetMapping("/type/{type}")
-    public List<TitleDTO> searchTitlesByType(@PathVariable String type) {
-        return titleService.searchTitlesByType(type);
+    public ResponseEntity<List<TitleDTO>> searchTitlesByType(@PathVariable String type) {
+        List<TitleDTO> searchTitlesByType = titleService.searchTitlesByType(type);
+		return new ResponseEntity<List<TitleDTO>>(searchTitlesByType,HttpStatus.OK);
     }
-
+ 
     @GetMapping("/pubid/{pubid}")
-    public List<TitleDTO> searchTitlesByPubId(@PathVariable Long pubid) {
-        return titleService.searchTitlesByPubId(pubid);
+    public ResponseEntity<List<TitleDTO>> searchTitlesByPubId(@PathVariable Long pubid) {
+        List<TitleDTO> searchTitlesByPubId = titleService.searchTitlesByPubId(pubid);
+		return new ResponseEntity<List<TitleDTO>>(searchTitlesByPubId, HttpStatus.OK);
     }
-
+ 
     @GetMapping("/pubdate/{pubdate}")
-    public List<TitleDTO> searchTitlesByPubDate(@PathVariable String pubdate) {
-        return titleService.searchTitlesByPubDate(pubdate);
+    public ResponseEntity<List<TitleDTO>> searchTitlesByPubDate(@PathVariable String pubdate) {
+        List<TitleDTO> searchTitlesByPubDate = titleService.searchTitlesByPubDate(pubdate);
+		return new ResponseEntity<>( searchTitlesByPubDate,HttpStatus.OK);
     }
-
-
+ 
+ 
     @GetMapping("/top5titles")
-    public List<TitleDTO> searchTop5TitlesByYtd() {
-        return titleService.searchTop5TitlesByYtd();
+    public ResponseEntity<List<TitleDTO>> searchTop5TitlesByYtd() {
+        List<TitleDTO> searchTop5TitlesByYtd = titleService.searchTop5TitlesByYtd();
+		return new ResponseEntity<List<TitleDTO>>(searchTop5TitlesByYtd, HttpStatus.OK);
     }
-
+ 
     @PutMapping("/{id}")
-    public TitleDTO updateAllTitleDetails(@PathVariable Long id, @RequestBody TitleDTO titleDTO) {
-        return titleService.updateAllTitleDetails(id, titleDTO);
+    public ResponseEntity<TitleDTO> updateAllTitleDetails(@PathVariable Long id, @RequestBody TitleDTO titleDTO) {
+        TitleDTO updateAllTitleDetails = titleService.updateAllTitleDetails(id, titleDTO);
+		return new ResponseEntity<>(updateAllTitleDetails,HttpStatus.OK);
     }
-
+ 
     @PatchMapping("/{id}")
-    public TitleDTO updateSpecificTitleDetails(@PathVariable Long id, @RequestBody TitleDTO titleDTO) {
-        return titleService.updateSpecificTitleDetails(id, titleDTO);
+    public ResponseEntity<TitleDTO> updateSpecificTitleDetails(@PathVariable Long id, @RequestBody TitleDTO titleDTO) {
+        TitleDTO updateSpecificTitleDetails = titleService.updateSpecificTitleDetails(id, titleDTO);
+		return new ResponseEntity<>(updateSpecificTitleDetails,HttpStatus.OK);
     }
 }

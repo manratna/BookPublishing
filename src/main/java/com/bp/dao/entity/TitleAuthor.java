@@ -20,11 +20,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TitleAuthor {
-	
-	@Id
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-	
+
     @ManyToOne
     @JoinColumn(name = "au_id")
     private Author author;
@@ -38,5 +38,4 @@ public class TitleAuthor {
 
     @Column(name = "royaltyper")
     private Integer royaltyPer;
-
 }
