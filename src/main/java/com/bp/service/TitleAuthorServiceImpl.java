@@ -8,7 +8,7 @@ import com.bp.dao.TitleAuthorRepository;
 import com.bp.dao.entity.Author;
 import com.bp.dao.entity.Title;
 import com.bp.dao.entity.TitleAuthor;
-import com.bp.exception.NoDataAvailableException;
+import com.bp.exception.TitleNotFoundException;
 import com.bp.model.TitleAuthorDTO;
 
 @Service
@@ -32,7 +32,7 @@ public class TitleAuthorServiceImpl implements TitleAuthorService {
     	 titleAuthorRepository.save(titleAuthor);
          return "Record Created Successfully";
      } catch (Exception e) {
-         throw new NoDataAvailableException("Error creating TitleAuthor record");
+         throw new TitleNotFoundException("Error creating TitleAuthor record");
      }
      
  }

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import com.bp.dao.TitleRepository;
 import com.bp.dao.entity.Publisher;
 import com.bp.dao.entity.Title;
-import com.bp.exception.NoDataAvailableException;
+import com.bp.exception.TitleNotFoundException;
 import com.bp.model.PublisherDTO;
 import com.bp.model.TitleDTO;
 
@@ -33,7 +33,7 @@ public class TitleServiceImpl implements TitleService {
             titleRepository.save(title);
             return "Record Created Successfully";
         } catch (Exception e) {
-            throw new NoDataAvailableException("Error Creating Record");
+            throw new TitleNotFoundException("Error Creating Record");
         }
     }
 
@@ -43,7 +43,7 @@ public class TitleServiceImpl implements TitleService {
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
         if (titleDTOs.isEmpty()) {
-            throw new NoDataAvailableException("No titles available");
+            throw new TitleNotFoundException("No titles available");
         }
         return titleDTOs;
     }
@@ -54,7 +54,7 @@ public class TitleServiceImpl implements TitleService {
         if (foundTitle != null) {
             return convertToDTO(foundTitle);
         } else {
-            throw new NoDataAvailableException("Title not found");
+            throw new TitleNotFoundException("Title not found");
         }
     }
 
@@ -65,7 +65,7 @@ public class TitleServiceImpl implements TitleService {
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
         if (titleDTOs.isEmpty()) {
-            throw new NoDataAvailableException("No titles available for the given type");
+            throw new TitleNotFoundException("No titles available for the given type");
         }
         return titleDTOs;
     }
@@ -77,7 +77,7 @@ public class TitleServiceImpl implements TitleService {
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
         if (titleDTOs.isEmpty()) {
-            throw new NoDataAvailableException("No titles available for the given publisher ID");
+            throw new TitleNotFoundException("No titles available for the given publisher ID");
         }
         return titleDTOs;
     }
@@ -89,7 +89,7 @@ public class TitleServiceImpl implements TitleService {
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
         if (titleDTOs.isEmpty()) {
-            throw new NoDataAvailableException("No titles available for the given publication date");
+            throw new TitleNotFoundException("No titles available for the given publication date");
         }
         return titleDTOs;
     }
@@ -101,7 +101,7 @@ public class TitleServiceImpl implements TitleService {
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
         if (titleDTOs.isEmpty()) {
-            throw new NoDataAvailableException("No titles available for the top 5 sales");
+            throw new TitleNotFoundException("No titles available for the top 5 sales");
         }
         return titleDTOs;
     }
@@ -116,7 +116,7 @@ public class TitleServiceImpl implements TitleService {
             title.setPublisher(publisher);
             titleRepository.save(title);
             return convertToDTO(title);
-        }).orElseThrow(() -> new NoDataAvailableException("Title not found"));
+        }).orElseThrow(() -> new TitleNotFoundException("Title not found"));
     }
 
     @Override
@@ -129,7 +129,7 @@ public class TitleServiceImpl implements TitleService {
             title.setPublisher(publisher);
             titleRepository.save(title);
             return convertToDTO(title);
-        }).orElseThrow(() -> new NoDataAvailableException("Title not found"));
+        }).orElseThrow(() -> new TitleNotFoundException("Title not found"));
     }
 
     private TitleDTO convertToDTO(Title title) {
