@@ -8,6 +8,7 @@ import com.bp.dao.TitleAuthorRepository;
 import com.bp.dao.entity.Author;
 import com.bp.dao.entity.Title;
 import com.bp.dao.entity.TitleAuthor;
+import com.bp.exception.NoDataAvailableException;
 import com.bp.model.TitleAuthorDTO;
 
 @Service
@@ -27,8 +28,13 @@ public class TitleAuthorServiceImpl implements TitleAuthorService {
      BeanUtils.copyProperties(titleAuthorDTO.getAuthor(), author);
      titleAuthor.setAuthor(author);
      BeanUtils.copyProperties(titleAuthorDTO, titleAuthor);
-     titleAuthorRepository.save(titleAuthor);
-     return "Record Created Successfully";
+     try {
+    	 titleAuthorRepository.save(titleAuthor);
+         return "Record Created Successfully";
+     } catch (Exception e) {
+         throw new NoDataAvailableException("Error creating TitleAuthor record");
+     }
+     
  }
 
 }

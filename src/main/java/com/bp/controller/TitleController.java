@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bp.model.TitleDTO;
 import com.bp.service.TitleService;
+
+import jakarta.validation.Valid;
  
 @RestController
 @RequestMapping("/api/titles")
@@ -26,7 +28,7 @@ public class TitleController {
  
  
     @PostMapping("/post")
-    public ResponseEntity<String> addNewTitle(@RequestBody TitleDTO titleDTO) {
+    public ResponseEntity<String> addNewTitle(@Valid @RequestBody TitleDTO titleDTO) {
         String addNewTitle = titleService.addNewTitle(titleDTO);
 		return new ResponseEntity<String>(addNewTitle, HttpStatus.CREATED);
     }
@@ -69,13 +71,13 @@ public class TitleController {
     }
  
     @PutMapping("/{id}")
-    public ResponseEntity<TitleDTO> updateAllTitleDetails(@PathVariable Long id, @RequestBody TitleDTO titleDTO) {
+    public ResponseEntity<TitleDTO> updateAllTitleDetails(@PathVariable Long id,@Valid @RequestBody TitleDTO titleDTO) {
         TitleDTO updateAllTitleDetails = titleService.updateAllTitleDetails(id, titleDTO);
 		return new ResponseEntity<>(updateAllTitleDetails,HttpStatus.OK);
     }
  
     @PatchMapping("/{id}")
-    public ResponseEntity<TitleDTO> updateSpecificTitleDetails(@PathVariable Long id, @RequestBody TitleDTO titleDTO) {
+    public ResponseEntity<TitleDTO> updateSpecificTitleDetails(@PathVariable Long id,@Valid @RequestBody TitleDTO titleDTO) {
         TitleDTO updateSpecificTitleDetails = titleService.updateSpecificTitleDetails(id, titleDTO);
 		return new ResponseEntity<>(updateSpecificTitleDetails,HttpStatus.OK);
     }
