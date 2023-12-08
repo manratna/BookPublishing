@@ -27,7 +27,7 @@ public class PublisherServiceImpl implements PublisherService {
 	}
  
 	@Override
-	public List<PublisherDTO> getAllPublishers() throws NoDataAvailableException {
+	public List<PublisherDTO> getAllPublishers() {
 		List<PublisherDTO> collect = publisherRepository.findAll().stream().map(this::convertToDTO).collect(Collectors.toList());
 		if (collect.isEmpty()) {
 			throw new NoDataAvailableException("NO data Available");
@@ -37,7 +37,7 @@ public class PublisherServiceImpl implements PublisherService {
 	}
  
 	@Override
-	public List<PublisherDTO> getPublisherByName(String name) throws NoDataAvailableException{
+	public List<PublisherDTO> getPublisherByName(String name) {
 		List<PublisherDTO> collect = publisherRepository.findByName(name).stream().map(this::convertToDTO).collect(Collectors.toList());
 		if(collect.isEmpty()) {
 			throw new NoDataAvailableException("No Publisher Available with name: "+name);
@@ -46,7 +46,7 @@ public class PublisherServiceImpl implements PublisherService {
 	}
  
 	@Override
-	public List<PublisherDTO> getPublisherByCity(String city)throws NoDataAvailableException {
+	public List<PublisherDTO> getPublisherByCity(String city) {
 		List<PublisherDTO> collect = publisherRepository.findByCity(city).stream().map(this::convertToDTO).collect(Collectors.toList());
 		if(collect.isEmpty()) {
 			throw new NoDataAvailableException("No Publisher Available with city: "+city);
@@ -55,7 +55,7 @@ public class PublisherServiceImpl implements PublisherService {
 	}
  
 	@Override
-	public List<PublisherDTO> getPublisherByState(String state)throws NoDataAvailableException {
+	public List<PublisherDTO> getPublisherByState(String state) {
 		List<PublisherDTO> collect = publisherRepository.findByState(state).stream().map(this::convertToDTO).collect(Collectors.toList());
 		if(collect.isEmpty()) {
 			throw new NoDataAvailableException("No Publisher Available with state: "+state);
@@ -64,7 +64,7 @@ public class PublisherServiceImpl implements PublisherService {
 	}
  
 	@Override
-	public List<PublisherDTO> getPublisherByCountry(String country)throws NoDataAvailableException {
+	public List<PublisherDTO> getPublisherByCountry(String country){
 		List<PublisherDTO> collect = publisherRepository.findByCountry(country).stream().map(this::convertToDTO).collect(Collectors.toList());
 		if(collect.isEmpty()) {
 			throw new NoDataAvailableException("No Publisher Available with country: "+country);
@@ -73,7 +73,7 @@ public class PublisherServiceImpl implements PublisherService {
 	}
  
 	@Override
-	public PublisherDTO updatePublisher(Long id, PublisherDTO publisherDTO)throws NoDataAvailableException {
+	public PublisherDTO updatePublisher(Long id, PublisherDTO publisherDTO){
 		Publisher existingPublisher = publisherRepository.findById(id)
 				.orElseThrow(() -> new NoDataAvailableException("Publisher not found with id: " + id));
  
@@ -84,7 +84,7 @@ public class PublisherServiceImpl implements PublisherService {
 	}
  
 	@Override
-	public PublisherDTO partialUpdatePublisher(Long id, PublisherDTO publisherDTO) throws NoDataAvailableException{
+	public PublisherDTO partialUpdatePublisher(Long id, PublisherDTO publisherDTO) {
 		Publisher existingPublisher = publisherRepository.findById(id)
 				.orElseThrow(() -> new NoDataAvailableException("Publisher not found with id: " + id));
  

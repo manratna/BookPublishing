@@ -47,7 +47,6 @@ public class PublisherController {
 
 	}
 
-
 //	@GetMapping("/{id}")
 
 //	public ResponseEntity<PublisherDTO> getPublisherById(@PathVariable Long id) {
@@ -57,14 +56,14 @@ public class PublisherController {
 //		return new ResponseEntity<PublisherDTO>(publisher, HttpStatus.OK);
 
 //	}
- 
+
 	@GetMapping("/pubname/{name}")
 
 	public ResponseEntity<List<PublisherDTO>> searchPublishersByName(@PathVariable String name) {
 
 		List<PublisherDTO> publisher = publisherService.getPublisherByName(name);
 
-		return new ResponseEntity<List<PublisherDTO>>(publisher, HttpStatus.OK);
+		return new ResponseEntity<List<PublisherDTO>>(publisher, HttpStatus.FOUND);
 
 	}
 
@@ -74,7 +73,7 @@ public class PublisherController {
 
 		List<PublisherDTO> publisher = publisherService.getPublisherByCity(city);
 
-		return new ResponseEntity<List<PublisherDTO>>(publisher, HttpStatus.OK);
+		return new ResponseEntity<List<PublisherDTO>>(publisher, HttpStatus.FOUND);
 
 	}
 
@@ -84,7 +83,7 @@ public class PublisherController {
 
 		List<PublisherDTO> publisher = publisherService.getPublisherByState(state);
 
-		return new ResponseEntity<List<PublisherDTO>>(publisher, HttpStatus.OK);
+		return new ResponseEntity<List<PublisherDTO>>(publisher, HttpStatus.FOUND);
 
 	}
 
@@ -94,7 +93,7 @@ public class PublisherController {
 
 		List<PublisherDTO> publisher = publisherService.getPublisherByCountry(country);
 
-		return new ResponseEntity<List<PublisherDTO>>(publisher, HttpStatus.OK);
+		return new ResponseEntity<List<PublisherDTO>>(publisher, HttpStatus.FOUND);
 
 	}
 
@@ -108,10 +107,10 @@ public class PublisherController {
 
 	}
 
-
 	@PatchMapping("/id")
 
-	public ResponseEntity<Void> updateWholePublisherInfo(@PathVariable Long id, @RequestBody PublisherDTO publisherDTO) {
+	public ResponseEntity<Void> updateWholePublisherInfo(@PathVariable Long id,
+			@RequestBody PublisherDTO publisherDTO) {
 
 		publisherService.updatePublisher(id, publisherDTO);
 
