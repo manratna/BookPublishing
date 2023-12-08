@@ -96,7 +96,18 @@ public class EmployeeServiceImpl implements EmployeeService {
 
  @Override
  public EmployeeDTO partialUpdateEmployee(Long id, EmployeeDTO employeeDTO) {
-     // Implement partial update logic if needed
+     Optional<Employee> employeeOptional = employeeRepository.findById(id);
+     if (employeeOptional.isPresent()) {
+         Employee employee = employeeOptional.get();
+         try {
+        	 employee = copyProperties(employeeDTO, employee);
+             employeeRepository.save(employee);
+             return convertToDTO(employee);
+         } catch (Exception e) {
+             e.printStackTrace();
+             // Handle the exception as needed
+         }
+     }
      return null;
  }
 

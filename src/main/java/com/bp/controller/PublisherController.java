@@ -1,10 +1,9 @@
 package com.bp.controller;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -15,91 +14,109 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bp.dao.PublisherRepository;
-import com.bp.dao.entity.Publisher;
 import com.bp.model.PublisherDTO;
+import com.bp.service.PublisherService;
 
 @RestController
+
 @RequestMapping("/api/publishers")
+
 public class PublisherController {
 
-    @Autowired
-    private PublisherRepository publisherRepository;
+	@Autowired
 
-    @PostMapping("/post")
-    public ResponseEntity<String> addPublisher(@RequestBody PublisherDTO publisherDTO) {
-        Publisher publisher = new Publisher();
-        BeanUtils.copyProperties(publisherDTO, publisher);
-        publisherRepository.save(publisher);
-        return ResponseEntity.ok("Record Created Successfully");
-    }
+	private PublisherService publisherService;
 
-    @GetMapping
-    public ResponseEntity<List<PublisherDTO>> getAllPublishers() {
-        List<PublisherDTO> publishers = publisherRepository.findAll().stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(publishers);
-    }
+	@PostMapping("/post")
 
-    @GetMapping("/pubname/{name}")
-    public ResponseEntity<List<PublisherDTO>> getPublisherByName(@PathVariable String name) {
-        List<PublisherDTO> publishers = publisherRepository.findByName(name).stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(publishers);
-    }
+	public ResponseEntity<String> addNewPublisher(@RequestBody PublisherDTO publisherDTO) {
 
-    @GetMapping("/city/{city}")
-    public ResponseEntity<List<PublisherDTO>> getPublisherByCity(@PathVariable String city) {
-        List<PublisherDTO> publishers = publisherRepository.findByCity(city).stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(publishers);
-    }
+		String result = publisherService.addPublisher(publisherDTO);
 
-    @GetMapping("/state/{state}")
-    public ResponseEntity<List<PublisherDTO>> getPublisherByState(@PathVariable String state) {
-        List<PublisherDTO> publishers = publisherRepository.findByState(state).stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(publishers);
-    }
+		return new ResponseEntity<String>(result, HttpStatus.CREATED);
 
-    @GetMapping("/country/{country}")
-    public ResponseEntity<List<PublisherDTO>> getPublisherByCountry(@PathVariable String country) {
-        List<PublisherDTO> publishers = publisherRepository.findByCountry(country).stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(publishers);
-    }
+	}
 
-    @PutMapping("/{id}")
-    public ResponseEntity<PublisherDTO> updatePublisher(@PathVariable Long id, @RequestBody PublisherDTO publisherDTO) {
-        Publisher existingPublisher = publisherRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Publisher not found with id: " + id));
+	@GetMapping
 
-        BeanUtils.copyProperties(publisherDTO, existingPublisher);
-        publisherRepository.save(existingPublisher);
+	public ResponseEntity<List<PublisherDTO>> getAllPublishers() {
 
-        return ResponseEntity.ok(convertToDTO(existingPublisher));
-    }
+		List<PublisherDTO> publishers = publisherService.getAllPublishers();
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<PublisherDTO> partialUpdatePublisher(@PathVariable Long id, @RequestBody PublisherDTO publisherDTO) {
-        Publisher existingPublisher = publisherRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Publisher not found with id: " + id));
+		return new ResponseEntity<List<PublisherDTO>>(publishers, HttpStatus.OK);
 
-        // Implement partial update logic here, e.g., update only non-null properties
+	}
 
-        publisherRepository.save(existingPublisher);
 
-        return ResponseEntity.ok(convertToDTO(existingPublisher));
-    }
+//	@GetMapping("/{id}")
 
-    private PublisherDTO convertToDTO(Publisher publisher) {
-        PublisherDTO publisherDTO = new PublisherDTO();
-        BeanUtils.copyProperties(publisher, publisherDTO);
-        return publisherDTO;
-    }
+//	public ResponseEntity<PublisherDTO> getPublisherById(@PathVariable Long id) {
+
+//		PublisherDTO publisher = publisherService.searchPublishersById(id);
+
+//		return new ResponseEntity<PublisherDTO>(publisher, HttpStatus.OK);
+
+//	}
+ 
+	@GetMapping("/pubname/{name}")
+
+	public ResponseEntity<List<PublisherDTO>> searchPublishersByName(@PathVariable String name) {
+
+		List<PublisherDTO> publisher = publisherService.getPublisherByName(name);
+
+		return new ResponseEntity<List<PublisherDTO>>(publisher, HttpStatus.OK);
+
+	}
+
+	@GetMapping("/city/{city}")
+
+	public ResponseEntity<List<PublisherDTO>> searchPublishersByCity(@PathVariable String city) {
+
+		List<PublisherDTO> publisher = publisherService.getPublisherByCity(city);
+
+		return new ResponseEntity<List<PublisherDTO>>(publisher, HttpStatus.OK);
+
+	}
+
+	@GetMapping("/state/{state}")
+
+	public ResponseEntity<List<PublisherDTO>> searchPublishersByState(@PathVariable String state) {
+
+		List<PublisherDTO> publisher = publisherService.getPublisherByState(state);
+
+		return new ResponseEntity<List<PublisherDTO>>(publisher, HttpStatus.OK);
+
+	}
+
+	@GetMapping("/Country/{country}")
+
+	public ResponseEntity<List<PublisherDTO>> searchPublishersByCountry(@PathVariable String country) {
+
+		List<PublisherDTO> publisher = publisherService.getPublisherByCountry(country);
+
+		return new ResponseEntity<List<PublisherDTO>>(publisher, HttpStatus.OK);
+
+	}
+
+	@PutMapping("/id")
+
+	public ResponseEntity<Void> updatePublisherDetails(@PathVariable Long id, @RequestBody PublisherDTO publisherDTO) {
+
+		publisherService.partialUpdatePublisher(id, publisherDTO);
+
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+	}
+
+
+	@PatchMapping("/id")
+
+	public ResponseEntity<Void> updateWholePublisherInfo(@PathVariable Long id, @RequestBody PublisherDTO publisherDTO) {
+
+		publisherService.updatePublisher(id, publisherDTO);
+
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+	}
+
 }

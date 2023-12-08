@@ -20,12 +20,6 @@ public class TitleDTO {
     private Integer ytdSales;
     private String notes;
     private String pubdate;
-	@Override
-	public String toString() {
-		return "TitleDTO [id=" + id + ", title=" + title + ", type=" + type + ", publisher=" + publisher + ", price="
-				+ price + ", advance=" + advance + ", royalty=" + royalty + ", ytdSales=" + ytdSales + ", notes="
-				+ notes + ", pubdate=" + pubdate + "]";
-	}
     
 }
 
