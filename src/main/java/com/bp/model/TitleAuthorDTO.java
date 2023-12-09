@@ -1,5 +1,8 @@
 package com.bp.model;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,9 +14,19 @@ import lombok.Setter;
 @AllArgsConstructor
 public class TitleAuthorDTO {
     private Long id;
-    private AuthorDTO author;
-    private TitleDTO title;
-    private Integer auOrd;
-    private Integer royaltyPer;
-}
 
+    @NotNull(message = "Author information is required")
+    @Valid
+    private AuthorDTO author;
+
+    @NotNull(message = "Title information is required")
+    @Valid
+    private TitleDTO title;
+
+    @Positive(message = "Order should be a positive integer")
+    private Integer auOrd;
+
+    @Positive(message = "Royalty percentage should be a positive integer")
+    private Integer royaltyPer;
+
+}
