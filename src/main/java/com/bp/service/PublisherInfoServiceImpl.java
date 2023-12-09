@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.bp.dao.PublisherInfoRepository;
 import com.bp.dao.entity.Publisher;
 import com.bp.dao.entity.PublisherInfo;
-import com.bp.exception.NoDataAvailableException;
+import com.bp.exception.PublisherNotFoundException;
 import com.bp.model.PublisherDTO;
 import com.bp.model.PublisherInfoDTO;
 
@@ -27,7 +27,7 @@ public class PublisherInfoServiceImpl implements PublisherInfoService {
             publisherInfoRepository.save(publisherInfo);
             return convertToDTO(publisherInfoRepository.getById(publisherInfoDTO.getId()));
     	}catch (Exception e) {
-        	throw new NoDataAvailableException("NO data Available");
+        	throw new PublisherNotFoundException("NO data Available");
         }
     }
 
@@ -41,7 +41,7 @@ public class PublisherInfoServiceImpl implements PublisherInfoService {
                 publisherInfoRepository.save(publisherInfo);
                 return convertToDTO(publisherInfo);
             } catch (Exception e) {
-            	throw new NoDataAvailableException("NO data Available");
+            	throw new PublisherNotFoundException("NO data Available");
             }
         }
         return null;

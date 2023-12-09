@@ -24,8 +24,8 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(details);
 	}
 
-    @ExceptionHandler({ NoDataAvailableException.class })
-    public ResponseEntity<Object> handleNoDataAvailableException(NoDataAvailableException nda) {
+    @ExceptionHandler({ PublisherNotFoundException.class })
+    public ResponseEntity<Object> handleNoDataAvailableException(PublisherNotFoundException nda) {
         LocalDate dateTime = LocalDate.now();
         ErrorDetails details = new ErrorDetails(dateTime, nda.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(details);

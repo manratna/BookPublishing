@@ -9,6 +9,8 @@ public interface PublisherService {
 
     List<PublisherDTO> getAllPublishers();
 
+    PublisherDTO getPublisherById(Long id);
+    
     List<PublisherDTO> getPublisherByName(String name);
 
     List<PublisherDTO> getPublisherByCity(String city);

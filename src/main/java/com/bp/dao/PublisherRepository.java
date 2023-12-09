@@ -18,5 +18,5 @@ public interface PublisherRepository extends JpaRepository<Publisher, Long> {
 
     List<Publisher> findByCountry(String country);
 
-    // Additional custom queries can be added here if needed
+   
 }
