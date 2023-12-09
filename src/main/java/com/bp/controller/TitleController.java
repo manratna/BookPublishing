@@ -77,7 +77,7 @@ public class TitleController {
     }
  
     @PatchMapping("/{id}")
-    public ResponseEntity<TitleDTO> updateSpecificTitleDetails(@PathVariable Long id,@Valid @RequestBody TitleDTO titleDTO) {
+    public ResponseEntity<TitleDTO> updateSpecificTitleDetails(@PathVariable Long id, @RequestBody TitleDTO titleDTO) {
         TitleDTO updateSpecificTitleDetails = titleService.updateSpecificTitleDetails(id, titleDTO);
 		return new ResponseEntity<>(updateSpecificTitleDetails,HttpStatus.OK);
     }
