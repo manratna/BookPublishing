@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bp.model.PublisherInfoDTO;
 import com.bp.service.PublisherInfoService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/pubinfo")
 public class PublisherInfoController {
@@ -23,13 +25,13 @@ public class PublisherInfoController {
     private PublisherInfoService publisherInfoService;
 
     @PutMapping("/{id}")
-    public ResponseEntity<PublisherInfoDTO> updatePublisherInfo(@RequestBody PublisherInfoDTO publisherInfoDTO) {
+    public ResponseEntity<PublisherInfoDTO> updatePublisherInfo(@PathVariable Long id,@Valid @RequestBody PublisherInfoDTO publisherInfoDTO) {
         PublisherInfoDTO updatePublisherInfo = publisherInfoService.updatePublisherInfo(publisherInfoDTO);
 		return new ResponseEntity<>(updatePublisherInfo,HttpStatus.OK);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<PublisherInfoDTO> partialUpdatePublisherInfo(@PathVariable Long id, @RequestBody PublisherInfoDTO publisherInfoDTO) {
+    public ResponseEntity<PublisherInfoDTO> partialUpdatePublisherInfo(@PathVariable Long id,@RequestBody PublisherInfoDTO publisherInfoDTO) {
         PublisherInfoDTO partialUpdatePublisherInfo = publisherInfoService.partialUpdatePublisherInfo(id, publisherInfoDTO);
 		return new ResponseEntity<>(partialUpdatePublisherInfo,HttpStatus.OK);
     }
