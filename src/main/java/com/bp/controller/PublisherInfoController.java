@@ -3,6 +3,8 @@
 package com.bp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -21,12 +23,14 @@ public class PublisherInfoController {
     private PublisherInfoService publisherInfoService;
 
     @PutMapping("/{id}")
-    public PublisherInfoDTO updatePublisherInfo(@RequestBody PublisherInfoDTO publisherInfoDTO) {
-        return publisherInfoService.updatePublisherInfo(publisherInfoDTO);
+    public ResponseEntity<PublisherInfoDTO> updatePublisherInfo(@RequestBody PublisherInfoDTO publisherInfoDTO) {
+        PublisherInfoDTO updatePublisherInfo = publisherInfoService.updatePublisherInfo(publisherInfoDTO);
+		return new ResponseEntity<>(updatePublisherInfo,HttpStatus.OK);
     }
 
     @PatchMapping("/{id}")
-    public PublisherInfoDTO partialUpdatePublisherInfo(@PathVariable Long id, @RequestBody PublisherInfoDTO publisherInfoDTO) {
-        return publisherInfoService.partialUpdatePublisherInfo(id, publisherInfoDTO);
+    public ResponseEntity<PublisherInfoDTO> partialUpdatePublisherInfo(@PathVariable Long id, @RequestBody PublisherInfoDTO publisherInfoDTO) {
+        PublisherInfoDTO partialUpdatePublisherInfo = publisherInfoService.partialUpdatePublisherInfo(id, publisherInfoDTO);
+		return new ResponseEntity<>(partialUpdatePublisherInfo,HttpStatus.OK);
     }
 }
