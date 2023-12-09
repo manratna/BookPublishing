@@ -15,7 +15,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TitleDTO {
-	@NotNull
+
     private Long id;
     
     @NotBlank

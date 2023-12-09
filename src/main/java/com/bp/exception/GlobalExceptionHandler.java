@@ -16,6 +16,14 @@ import org.springframework.web.context.request.WebRequest;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+	
+	@ExceptionHandler({InValidDataException.class})
+	public ResponseEntity<Object> handleStudentNotFoundExection(InValidDataException nda) {
+		LocalDate dateTime=LocalDate.now();
+		ErrorDetails details=new ErrorDetails(dateTime, nda.getMessage());
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(details);
+	}
+
     @ExceptionHandler({ NoDataAvailableException.class })
     public ResponseEntity<Object> handleNoDataAvailableException(NoDataAvailableException nda) {
         LocalDate dateTime = LocalDate.now();
