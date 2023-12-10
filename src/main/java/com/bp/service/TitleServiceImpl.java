@@ -8,9 +8,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bp.dao.PublisherRepository;
 import com.bp.dao.TitleRepository;
 import com.bp.dao.entity.Publisher;
 import com.bp.dao.entity.Title;
+import com.bp.exception.PublisherNotFoundException;
 import com.bp.exception.TitleNotFoundException;
 import com.bp.model.PublisherDTO;
 import com.bp.model.TitleDTO;
@@ -21,6 +23,8 @@ public class TitleServiceImpl implements TitleService {
     @Autowired
     private TitleRepository titleRepository;
 
+    @Autowired
+    private PublisherRepository publisherRepository;
     @Override
     public String addNewTitle(TitleDTO titleDTO) {
         Title title = new Title();
@@ -122,15 +126,59 @@ public class TitleServiceImpl implements TitleService {
     @Override
     public TitleDTO updateSpecificTitleDetails(Long id, TitleDTO titleDTO) {
         Optional<Title> titleOptional = titleRepository.findById(id);
-        return titleOptional.map(title -> {
-            BeanUtils.copyProperties(titleDTO, title);
-            Publisher publisher = new Publisher();
-            BeanUtils.copyProperties(titleDTO.getPublisher(), publisher);
-            title.setPublisher(publisher);
+        if (titleOptional.isPresent()) {
+            Title title = titleOptional.get();
+
+            if (titleDTO.getTitle() != null) {
+                title.setTitle(titleDTO.getTitle());
+            }
+
+            if (titleDTO.getType() != null) {
+                title.setType(titleDTO.getType());
+            }
+
+            if (titleDTO.getPublisher() != null && titleDTO.getPublisher().getId() != null) {
+                Optional<Publisher> existingPublisherOptional = publisherRepository.findById(titleDTO.getPublisher().getId());
+                if (existingPublisherOptional.isPresent()) {
+                    title.setPublisher(existingPublisherOptional.get());
+                } else {
+                    throw new PublisherNotFoundException("Publisher not found");
+                }
+            } else {
+                throw new IllegalArgumentException("Publisher ID cannot be null");
+            }
+
+            if (titleDTO.getPrice() != null) {
+                title.setPrice(titleDTO.getPrice());
+            }
+
+            if (titleDTO.getAdvance() != null) {
+                title.setAdvance(titleDTO.getAdvance());
+            }
+
+            if (titleDTO.getRoyalty() != null) {
+                title.setRoyalty(titleDTO.getRoyalty());
+            }
+
+            if (titleDTO.getYtdSales() != null) {
+                title.setYtdSales(titleDTO.getYtdSales());
+            }
+
+            if (titleDTO.getNotes() != null) {
+                title.setNotes(titleDTO.getNotes());
+            }
+
+            if (titleDTO.getPubdate() != null) {
+                title.setPubdate(titleDTO.getPubdate());
+            }
+
             titleRepository.save(title);
             return convertToDTO(title);
-        }).orElseThrow(() -> new TitleNotFoundException("Title not found"));
+        } else {
+            throw new TitleNotFoundException("Title not found");
+        }
     }
+
 
     private TitleDTO convertToDTO(Title title) {
         TitleDTO titleDTO = new TitleDTO();
