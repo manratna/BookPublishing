@@ -105,9 +105,9 @@ public class PublisherController {
 
 	public ResponseEntity<PublisherDTO> updatePublisherDetails(@PathVariable Long id,@Valid @RequestBody PublisherDTO publisherDTO) {
 
-		PublisherDTO partialUpdatePublisher = publisherService.partialUpdatePublisher(id, publisherDTO);
+		PublisherDTO partialUpdatePublisher = publisherService.updatePublisher(id, publisherDTO);
 
-		return new ResponseEntity<PublisherDTO>(partialUpdatePublisher,HttpStatus.NO_CONTENT);
+		return new ResponseEntity<PublisherDTO>(partialUpdatePublisher,HttpStatus.ACCEPTED);
 
 	}
 
@@ -116,9 +116,9 @@ public class PublisherController {
 	public ResponseEntity<PublisherDTO> updateWholePublisherInfo(@PathVariable Long id,
 			@RequestBody PublisherDTO publisherDTO) {
 
-		PublisherDTO updatePublisher = publisherService.updatePublisher(id, publisherDTO);
+		PublisherDTO updatePublisher = publisherService.partialUpdatePublisher(id, publisherDTO);
 
-		return new ResponseEntity<PublisherDTO>(updatePublisher,HttpStatus.NO_CONTENT);
+		return new ResponseEntity<PublisherDTO>(updatePublisher,HttpStatus.ACCEPTED);
 
 	}
 

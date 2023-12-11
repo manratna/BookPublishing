@@ -1,5 +1,3 @@
-// PublisherInfoController.java
-
 package com.bp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
