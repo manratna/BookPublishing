@@ -180,6 +180,29 @@ public class TitleServiceImpl implements TitleService {
     }
 
 
+    @Override
+    public List<TitleDTO> getTitlesByAuthorName(String Name) {
+    	List<TitleDTO> titleDTOs = titleRepository.findByAuthorName(Name).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+        if (titleDTOs.isEmpty()) {
+            throw new TitleNotFoundException("No titles available");
+        }
+        return titleDTOs;
+    }
+    
+	@Override
+	public List<TitleDTO> searchTop5ExpensiveTitles() {
+		List<Title> titles = titleRepository.findTop5ByOrderByPriceDesc();
+        List<TitleDTO> titleDTOs = titles.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+        if (titleDTOs.isEmpty()) {
+            throw new TitleNotFoundException("No titles available for the top 5 Expensive sales");
+        }
+        return titleDTOs;
+	}
+	
     private TitleDTO convertToDTO(Title title) {
         TitleDTO titleDTO = new TitleDTO();
         BeanUtils.copyProperties(title, titleDTO);
