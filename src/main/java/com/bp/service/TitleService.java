@@ -19,8 +19,12 @@ public interface TitleService {
     List<TitleDTO> searchTitlesByPubDate(String pubDate);
 
     List<TitleDTO> searchTop5TitlesByYtd();
+    
+    List<TitleDTO> searchTop5ExpensiveTitles();
 
     TitleDTO updateAllTitleDetails(Long id, TitleDTO titleDTO);
 
     TitleDTO updateSpecificTitleDetails(Long id, TitleDTO titleDTO);
+    
+    List<TitleDTO> getTitlesByAuthorName(String Name);
 }
