@@ -49,35 +49,30 @@ class TitleAuthorServiceImplTest {
         verify(titleAuthorRepository).save(any());
     }
 
-    // Utility method to create a sample TitleAuthorDTO based on the provided data
     private TitleAuthorDTO createSampleTitleAuthorDTO() {
         TitleAuthorDTO titleAuthorDTO = new TitleAuthorDTO();
         titleAuthorDTO.setId(1L);
         titleAuthorDTO.setAuOrd(1);
         titleAuthorDTO.setRoyaltyPer(60);
 
-        // Set other properties of titleAuthorDTO based on the provided data
         titleAuthorDTO.setTitle(createSampleTitleDTO());
         titleAuthorDTO.setAuthor(createSampleAuthorDTO());
 
         return titleAuthorDTO;
     }
 
-    // Utility method to create a sample TitleAuthor based on the provided data
     private TitleAuthor createSampleTitleAuthor() {
         TitleAuthor titleAuthorEntity = new TitleAuthor();
         titleAuthorEntity.setId(1L);
         titleAuthorEntity.setAuOrd(1);
         titleAuthorEntity.setRoyaltyPer(60);
 
-        // Set other properties of titleAuthorEntity based on the provided data
         titleAuthorEntity.setTitle(createSampleTitleEntity());
         titleAuthorEntity.setAuthor(createSampleAuthorEntity());
 
         return titleAuthorEntity;
     }
 
-    // Utility method to create a sample TitleDTO based on the provided data
     private TitleDTO createSampleTitleDTO() {
         TitleDTO titleDTO = new TitleDTO();
         titleDTO.setId(1L);
@@ -90,18 +85,15 @@ class TitleAuthorServiceImplTest {
         titleDTO.setNotes("Sample notes about the title");
         titleDTO.setPubdate("01-01-2022");
 
-        // Manually create a sample Publisher
         PublisherDTO publisherEntity = new PublisherDTO();
         publisherEntity.setId(1L);
         publisherEntity.setName("Sample Publisher");
-        // Set other properties of publisherEntity based on the provided data
 
         titleDTO.setPublisher(publisherEntity);
 
         return titleDTO;
     }
 
-    // Utility method to create a sample AuthorDTO based on the provided data
     private AuthorDTO createSampleAuthorDTO() {
         AuthorDTO authorDTO = new AuthorDTO();
         authorDTO.setId(1L);
@@ -114,7 +106,6 @@ class TitleAuthorServiceImplTest {
         return authorDTO;
     }
 
-    // Utility method to create a sample Title based on the provided data
     private Title createSampleTitleEntity() {
         Title titleEntity = new Title();
         titleEntity.setId(1L);
@@ -127,18 +118,15 @@ class TitleAuthorServiceImplTest {
         titleEntity.setNotes("Sample notes about the title");
         titleEntity.setPubdate("01-01-2022");
 
-        // Manually create a sample Publisher
         Publisher publisherEntity = new Publisher();
         publisherEntity.setId(1L);
         publisherEntity.setName("Sample Publisher");
-        // Set other properties of publisherEntity based on the provided data
 
         titleEntity.setPublisher(publisherEntity);
 
         return titleEntity;
     }
 
-    // Utility method to create a sample Author based on the provided data
     private Author createSampleAuthorEntity() {
         Author authorEntity = new Author();
         authorEntity.setId(1L);
