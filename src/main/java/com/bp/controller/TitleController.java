@@ -69,6 +69,12 @@ public class TitleController {
         List<TitleDTO> searchTop5TitlesByYtd = titleService.searchTop5TitlesByYtd();
 		return new ResponseEntity<List<TitleDTO>>(searchTop5TitlesByYtd, HttpStatus.OK);
     }
+    
+    @GetMapping("/top5ExpensiveTitles")
+    public ResponseEntity<List<TitleDTO>> searchTop5ExpensiveTitles() {
+        List<TitleDTO> searchTop5TitlesByYtd = titleService.searchTop5ExpensiveTitles();
+		return new ResponseEntity<List<TitleDTO>>(searchTop5TitlesByYtd, HttpStatus.OK);
+    }
  
     @PutMapping("/{id}")
     public ResponseEntity<TitleDTO> updateAllTitleDetails(@PathVariable Long id,@Valid @RequestBody TitleDTO titleDTO) {
@@ -80,5 +86,11 @@ public class TitleController {
     public ResponseEntity<TitleDTO> updateSpecificTitleDetails(@PathVariable Long id, @RequestBody TitleDTO titleDTO) {
         TitleDTO updateSpecificTitleDetails = titleService.updateSpecificTitleDetails(id, titleDTO);
 		return new ResponseEntity<>(updateSpecificTitleDetails,HttpStatus.OK);
+    }
+    
+    @GetMapping("/authorLastName/{authorName}")
+    public ResponseEntity<List<TitleDTO>> getTitlesByAuthorName(@PathVariable String authorName) {
+        List<TitleDTO> titles = titleService.getTitlesByAuthorName(authorName);
+        return new ResponseEntity<>(titles, HttpStatus.OK);
     }
 }

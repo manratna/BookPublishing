@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bp.model.PublisherDTO;
 import com.bp.service.PublisherService;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+
 @RestController
 
 @RequestMapping("/api/publishers")
@@ -29,7 +32,7 @@ public class PublisherController {
 
 	@PostMapping("/post")
 
-	public ResponseEntity<String> addNewPublisher(@RequestBody PublisherDTO publisherDTO) {
+	public ResponseEntity<String> addNewPublisher(@Valid @RequestBody PublisherDTO publisherDTO) {
 
 		String result = publisherService.addPublisher(publisherDTO);
 
@@ -47,15 +50,15 @@ public class PublisherController {
 
 	}
 
-//	@GetMapping("/{id}")
+	@GetMapping("/{id}")
 
-//	public ResponseEntity<PublisherDTO> getPublisherById(@PathVariable Long id) {
+	public ResponseEntity<PublisherDTO> getPublisherById(@PathVariable Long id) {
 
-//		PublisherDTO publisher = publisherService.searchPublishersById(id);
+		PublisherDTO publisher = publisherService.getPublisherById(id);
 
-//		return new ResponseEntity<PublisherDTO>(publisher, HttpStatus.OK);
+		return new ResponseEntity<PublisherDTO>(publisher, HttpStatus.OK);
 
-//	}
+	}
 
 	@GetMapping("/pubname/{name}")
 
@@ -97,24 +100,25 @@ public class PublisherController {
 
 	}
 
-	@PutMapping("/id")
 
-	public ResponseEntity<Void> updatePublisherDetails(@PathVariable Long id, @RequestBody PublisherDTO publisherDTO) {
+	@PutMapping("/{id}")
 
-		publisherService.partialUpdatePublisher(id, publisherDTO);
+	public ResponseEntity<PublisherDTO> updatePublisherDetails(@PathVariable Long id,@Valid @RequestBody PublisherDTO publisherDTO) {
 
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		PublisherDTO partialUpdatePublisher = publisherService.partialUpdatePublisher(id, publisherDTO);
+
+		return new ResponseEntity<PublisherDTO>(partialUpdatePublisher,HttpStatus.NO_CONTENT);
 
 	}
 
-	@PatchMapping("/id")
+	@PatchMapping("/{id}")
 
-	public ResponseEntity<Void> updateWholePublisherInfo(@PathVariable Long id,
+	public ResponseEntity<PublisherDTO> updateWholePublisherInfo(@PathVariable Long id,
 			@RequestBody PublisherDTO publisherDTO) {
 
-		publisherService.updatePublisher(id, publisherDTO);
+		PublisherDTO updatePublisher = publisherService.updatePublisher(id, publisherDTO);
 
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		return new ResponseEntity<PublisherDTO>(updatePublisher,HttpStatus.NO_CONTENT);
 
 	}
 
