@@ -38,4 +38,8 @@ public class Store {
     @Column(name = "zip")
     private String zip;
 
-}
+	
+		
+	}
+
+

@@ -25,7 +25,8 @@ public class StoreController {
 	
 	@Autowired
     private StoreService storeService;
-
+	
+    @PostMapping 
 	public ResponseEntity<String> addNewStore(@Valid @RequestBody StoreDTO storeDTO) {
 	    String result = storeService.addNewStore(storeDTO);
 	    System.out.println(storeDTO.getAddress() + " controller");

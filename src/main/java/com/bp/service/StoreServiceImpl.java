@@ -8,13 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.bp.dao.StoreRepository;
 import com.bp.dao.entity.Store;
-import com.bp.exception.NoDataAvailableException;
-import com.bp.exception.NoStoreDataAvailableException;
+import com.bp.exception.StoreNotFoundException;
 import com.bp.model.StoreDTO;
 
 @Service
 public class StoreServiceImpl implements StoreService {
- 
+
 	@Autowired
     private StoreRepository storeRepository;
     
@@ -25,64 +24,54 @@ public class StoreServiceImpl implements StoreService {
             BeanUtils.copyProperties(storeDTO, store);
             storeRepository.save(store);
             return "Record Created Successfully";
-        } catch (NoDataAvailableException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
             return "Error Creating Record";
         }
     }
 
     @Override
-    public List<StoreDTO> getAllStores()throws NoStoreDataAvailableException {
-         List<StoreDTO> collect = storeRepository.findAll().stream()
+    public List<StoreDTO> getAllStores() {
+        List<StoreDTO> storeDTOs = storeRepository.findAll().stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
-        return collect;
+        if (storeDTOs.isEmpty()) {
+            throw new StoreNotFoundException("No Stores available");
+        }
+  
+        return storeDTOs;
     }
 
     @Override
-    public List<StoreDTO> searchStoresByName(String name)throws NoStoreDataAvailableException {
-        List<Store> stores = storeRepository.findByName(name);
-        List<StoreDTO> collect = stores.stream()
+    public List<StoreDTO> searchStoresByName(String name) {
+        List<Store> store = storeRepository.findByName(name);
+        return store.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
-        if(collect.isEmpty()) {
-			throw new NoStoreDataAvailableException("No Stores Available with this name: "+name);
-		}
        
-		
-		return collect;
     }
+    
 
     @Override
-    public List<StoreDTO> searchStoresByCity(String city)throws NoStoreDataAvailableException {
+    public List<StoreDTO> searchStoresByCity(String city) {
         List<Store> stores = storeRepository.findByCity(city);
-        List<StoreDTO> collect = stores.stream()
+        return stores.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
-        if(collect.isEmpty()) {
-			throw new NoStoreDataAvailableException("No Stores Available with this city: "+city);
-		}
-        
-		return collect;
     }
 
     @Override
-    public List<StoreDTO> searchStoresByZip(String zip)throws NoStoreDataAvailableException {
+    public List<StoreDTO> searchStoresByZip(String zip) {
         List<Store> stores = storeRepository.findByZip(zip);
-        List<StoreDTO> collect = stores.stream()
+        return stores.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
-        if(collect.isEmpty()) {
-			throw new NoStoreDataAvailableException("No Stores Available with this Zip: "+zip);
-		}
-		return collect;
     }
 
     @Override
-    public StoreDTO getStoreById(Long id){
+    public StoreDTO getStoreById(Long id) {
         Optional<Store> storeOptional = storeRepository.findById(id);
-        StoreDTO orElse = storeOptional.map(this::convertToDTO).orElseThrow(()->new NoStoreDataAvailableException("No Stores Available with this id"+id));
-        
-		return orElse;
+        return storeOptional.map(this::convertToDTO).orElse(null);
     }
 
     @Override
