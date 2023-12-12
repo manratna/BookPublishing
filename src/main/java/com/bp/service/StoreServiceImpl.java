@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.bp.dao.StoreRepository;
 import com.bp.dao.entity.Store;
+import com.bp.exception.StoreNotFoundException;
 import com.bp.model.StoreDTO;
 
 @Service
@@ -34,16 +35,22 @@ public class StoreServiceImpl implements StoreService {
         List<StoreDTO> storeDTOs = storeRepository.findAll().stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
+        if (storeDTOs.isEmpty()) {
+            throw new StoreNotFoundException("No Stores available");
+        }
+  
         return storeDTOs;
     }
 
     @Override
     public List<StoreDTO> searchStoresByName(String name) {
-        List<Store> stores = storeRepository.findByName(name);
-        return stores.stream()
+        List<Store> store = storeRepository.findByName(name);
+        return store.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
+       
     }
+    
 
     @Override
     public List<StoreDTO> searchStoresByCity(String city) {

@@ -17,19 +17,21 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bp.model.StoreDTO;
 import com.bp.service.StoreService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/stores")
 public class StoreController {
 	
 	@Autowired
     private StoreService storeService;
-
-    @PostMapping
-    public ResponseEntity<String> addNewStore(@RequestBody StoreDTO storeDTO) {
-        String result = storeService.addNewStore(storeDTO);
-        System.out.println(storeDTO.getAddress()+"controller");
-        return new ResponseEntity<>(result, HttpStatus.CREATED);
-    }
+	
+    @PostMapping 
+	public ResponseEntity<String> addNewStore(@Valid @RequestBody StoreDTO storeDTO) {
+	    String result = storeService.addNewStore(storeDTO);
+	    System.out.println(storeDTO.getAddress() + " controller");
+	    return new ResponseEntity<>(result, HttpStatus.CREATED);
+	}
 
     @GetMapping
     public ResponseEntity<List<StoreDTO>> getAllStores() {
@@ -72,7 +74,7 @@ public class StoreController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Void> updateWholeStoreInfo(@PathVariable Long id, @RequestBody StoreDTO storeDTO) {
+    public ResponseEntity<Void> updateWholeStoreInfo(@Valid @PathVariable Long id, @RequestBody StoreDTO storeDTO) {
         storeService.updateWholeStoreInfo(id, storeDTO);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
