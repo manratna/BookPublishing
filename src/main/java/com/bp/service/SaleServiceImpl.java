@@ -1,5 +1,3 @@
-// SaleServiceImpl.java
-
 package com.bp.service;
 
 import java.util.List;
@@ -14,6 +12,7 @@ import com.bp.dao.entity.Publisher;
 import com.bp.dao.entity.Sale;
 import com.bp.dao.entity.Store;
 import com.bp.dao.entity.Title;
+import com.bp.exception.WrongInputException;
 import com.bp.model.PublisherDTO;
 import com.bp.model.SaleDTO;
 import com.bp.model.StoreDTO;
@@ -39,38 +38,48 @@ public class SaleServiceImpl implements SaleService {
     }
 
     @Override
-    public List<SaleDTO> getAllSales() {
-        return saleRepository.findAll().stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+    public List<SaleDTO> getAllSales() throws WrongInputException{
+        List<SaleDTO> sales = saleRepository.findAll().stream().map(this::convertToDTO).collect(Collectors.toList());
+        if (sales.isEmpty()) {
+            throw new WrongInputException("NO data Available in Sales");
+        }
+        return sales;
     }
 
     @Override
-    public SaleDTO getSaleByOrderNumber(Long orderNumber) {
-        return saleRepository.findById(orderNumber)
-                .map(this::convertToDTO)
-                .orElse(null);
+    public SaleDTO getSaleByOrderNumber(Long orderNumber) throws WrongInputException{
+        return saleRepository.findById(orderNumber).map(this::convertToDTO)
+                .orElseThrow(() -> new WrongInputException("No Sales Available with given order number"));
     }
 
     @Override
-    public List<SaleDTO> getSalesByTitleId(Long titleId) {
-        return saleRepository.findByTitleId(titleId).stream()
-                .map(this::convertToDTO)
+    public List<SaleDTO> getSalesByTitleId(Long titleId) throws WrongInputException{
+        List<SaleDTO> sales = saleRepository.findByTitleId(titleId).stream().map(this::convertToDTO)
                 .collect(Collectors.toList());
+        if (sales.isEmpty()) {
+            throw new WrongInputException("No Sales Available with given title id");
+        }
+        return sales;
     }
 
     @Override
-    public List<SaleDTO> getSalesByOrderDate(String orderDate) {
-        return saleRepository.findByOrderDate(orderDate).stream()
-                .map(this::convertToDTO)
+    public List<SaleDTO> getSalesByOrderDate(String orderDate) throws WrongInputException{
+        List<SaleDTO> sales = saleRepository.findByOrderDate(orderDate).stream().map(this::convertToDTO)
                 .collect(Collectors.toList());
+        if (sales.isEmpty()) {
+            throw new WrongInputException("No Sales Available in the given order date");
+        }
+        return sales;
     }
 
     @Override
-    public List<SaleDTO> getSalesByStoreId(Long storeId) {
-        return saleRepository.findByStoreId(storeId).stream()
-                .map(this::convertToDTO)
+    public List<SaleDTO> getSalesByStoreId(Long storeId) throws WrongInputException{
+        List<SaleDTO> sales = saleRepository.findByStoreId(storeId).stream().map(this::convertToDTO)
                 .collect(Collectors.toList());
+        if (sales.isEmpty()) {
+            throw new WrongInputException("No Sales Available with given store id");
+        }
+        return sales;
     }
 
     private SaleDTO convertToDTO(Sale sale) {
@@ -80,33 +89,63 @@ public class SaleServiceImpl implements SaleService {
     }
 
     private Sale copyProperties(SaleDTO source, Sale target) {
-        BeanUtils.copyProperties(source, target);
-        Store store = new Store();
-        BeanUtils.copyProperties(source.getStore(), store);
-        target.setStore(store);
-        Title title = new Title();
-        BeanUtils.copyProperties(source.getTitle(), title);
-        Publisher publisher = new Publisher();
-        BeanUtils.copyProperties(source.getTitle().getPublisher(), publisher);
-        title.setPublisher(publisher);
-        target.setTitle(title);
-        return target;
-        
+        if (source != null && target != null) {
+            BeanUtils.copyProperties(source, target);
 
+            StoreDTO sourceStore = source.getStore();
+            if (sourceStore != null) {
+                Store store = new Store();
+                BeanUtils.copyProperties(sourceStore, store);
+                target.setStore(store);
+            }
+
+            TitleDTO sourceTitle = source.getTitle();
+            if (sourceTitle != null) {
+                Title title = new Title();
+                BeanUtils.copyProperties(sourceTitle, title);
+
+                PublisherDTO sourcePublisher = sourceTitle.getPublisher();
+                if (sourcePublisher != null) {
+                    Publisher publisher = new Publisher();
+                    BeanUtils.copyProperties(sourcePublisher, publisher);
+                    title.setPublisher(publisher);
+                }
+
+                target.setTitle(title);
+            }
+        }
+
+        return target;
     }
 
     private SaleDTO copyProperties(Sale source, SaleDTO target) {
-        BeanUtils.copyProperties(source, target);
-        StoreDTO storeDTO = new StoreDTO();
-        BeanUtils.copyProperties(source.getStore(), storeDTO);
-        target.setStore(storeDTO);
-        TitleDTO titleDTO = new TitleDTO();
-        BeanUtils.copyProperties(source.getTitle(), titleDTO);
-        PublisherDTO publisherDTO = new PublisherDTO();
-        BeanUtils.copyProperties(source.getTitle().getPublisher(), publisherDTO);
-        titleDTO.setPublisher(publisherDTO);
-        target.setTitle(titleDTO);
+        if (source != null && target != null) {
+            BeanUtils.copyProperties(source, target);
+
+            Store sourceStore = source.getStore();
+            if (sourceStore != null) {
+                StoreDTO storeDTO = new StoreDTO();
+                BeanUtils.copyProperties(sourceStore, storeDTO);
+                target.setStore(storeDTO);
+            }
+
+            Title sourceTitle = source.getTitle();
+            if (sourceTitle != null) {
+                TitleDTO titleDTO = new TitleDTO();
+                BeanUtils.copyProperties(sourceTitle, titleDTO);
+
+                Publisher sourcePublisher = sourceTitle.getPublisher();
+                if (sourcePublisher != null) {
+                    PublisherDTO publisherDTO = new PublisherDTO();
+                    BeanUtils.copyProperties(sourcePublisher, publisherDTO);
+                    titleDTO.setPublisher(publisherDTO);
+                }
+
+                target.setTitle(titleDTO);
+            }
+        }
+
         return target;
-        
     }
+
 }

@@ -24,6 +24,13 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(details);
 	}
 
+	@ExceptionHandler({WrongInputException.class})
+	public ResponseEntity<Object> handleWrongInputException(WrongInputException nda) {
+		LocalDate dateTime=LocalDate.now();
+		ErrorDetails details=new ErrorDetails(dateTime, nda.getMessage());
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(details);
+	}
+	
     @ExceptionHandler({ PublisherNotFoundException.class })
     public ResponseEntity<Object> handleNoDataAvailableException(PublisherNotFoundException nda) {
         LocalDate dateTime = LocalDate.now();
