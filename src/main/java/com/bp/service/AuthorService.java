@@ -14,7 +14,7 @@ public interface AuthorService {
 
     List<AuthorDTO> getAuthorsByFirstName(String firstName);
 
-    AuthorDTO getAuthorByPhone(String phone);
+    AuthorDTO getAuthorsByPhone(String phone);
 
     List<AuthorDTO> getAuthorsByZip(String zip);
 
@@ -22,7 +22,7 @@ public interface AuthorService {
 
     List<AuthorDTO> getAuthorsByCity(String city);
 
-    void partialUpdateAuthor(Long id, AuthorDTO authorDTO);
+    AuthorDTO partialUpdateAuthor(Long id, AuthorDTO authorDTO);
 
     void updateAuthor(Long id, AuthorDTO authorDTO);
     

@@ -8,13 +8,11 @@ public class ErrorDetails {
     private String message;
     private List<String> errors;
 
-    // Constructor with only timestamp and message
     public ErrorDetails(LocalDate timestamp, String message) {
         this.timestamp = timestamp;
         this.message = message;
     }
 
-    // Constructor with timestamp, message, and errors
     public ErrorDetails(LocalDate timestamp, String message, List<String> errors) {
         this.timestamp = timestamp;
         this.message = message;
@@ -33,7 +31,6 @@ public class ErrorDetails {
         return errors;
     }
 
-    // Add a setter method for errors
     public void setErrors(List<String> errors) {
         this.errors = errors;
     }

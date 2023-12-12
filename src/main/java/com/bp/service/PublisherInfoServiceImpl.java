@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bp.dao.PublisherInfoRepository;
+import com.bp.dao.PublisherRepository;
 import com.bp.dao.entity.Publisher;
 import com.bp.dao.entity.PublisherInfo;
 import com.bp.exception.PublisherNotFoundException;
@@ -19,6 +20,9 @@ public class PublisherInfoServiceImpl implements PublisherInfoService {
     @Autowired
     private PublisherInfoRepository publisherInfoRepository;
 
+    @Autowired
+    private PublisherRepository publisherRepository;
+    
     @Override
     public PublisherInfoDTO updatePublisherInfo( PublisherInfoDTO publisherInfoDTO) {
     	try {
@@ -27,26 +31,49 @@ public class PublisherInfoServiceImpl implements PublisherInfoService {
             publisherInfoRepository.save(publisherInfo);
             return convertToDTO(publisherInfoRepository.getById(publisherInfoDTO.getId()));
     	}catch (Exception e) {
-        	throw new PublisherNotFoundException("NO data Available");
+        	throw new PublisherNotFoundException("Update failed");
         }
     }
+   
 
     @Override
     public PublisherInfoDTO partialUpdatePublisherInfo(Long id, PublisherInfoDTO publisherInfoDTO) {
-        Optional<PublisherInfo> publisherInfoOptional = publisherInfoRepository.findById(id);
-        if (publisherInfoOptional.isPresent()) {
-            PublisherInfo publisherInfo = publisherInfoOptional.get();
-            try {
-            	publisherInfo = copyProperties(publisherInfoDTO, publisherInfo);
-                publisherInfoRepository.save(publisherInfo);
-                return convertToDTO(publisherInfo);
-            } catch (Exception e) {
-            	throw new PublisherNotFoundException("NO data Available");
-            }
-        }
-        return null;
+    	
+      Optional<PublisherInfo> publisherInfoOptional = publisherInfoRepository.findById(id);
+      if(publisherInfoOptional.isPresent()) {
+    	  PublisherInfo publisherInfo=publisherInfoOptional.get();
+    	  
+    	  if(publisherInfoDTO.getId()!=null) {
+    		  publisherInfo.setId(publisherInfoDTO.getId());
+    	  }
+    	  
+    	  if (publisherInfoDTO.getPublisher() !=null && publisherInfoDTO.getPublisher().getId()!=null) {
+			Optional<Publisher> optional=publisherRepository.findById(publisherInfoDTO.getPublisher().getId());
+			if (optional.isPresent()) {
+				publisherInfo.setPublisher(optional.get());
+			}else {
+				throw new PublisherNotFoundException("NO data Available");
+			}
+		}
+    	  if(publisherInfoDTO.getLogo()!=null) {
+    		  publisherInfo.setLogo(publisherInfoDTO.getLogo());;
+    	  }
+    	  
+    	  if(publisherInfoDTO.getPrInfo()!=null) {
+    		  publisherInfo.setPrInfo(publisherInfoDTO.getPrInfo());
+    	  }
+    	  
+    	  publisherInfoRepository.save(publisherInfo);
+    	  return convertToDTO(publisherInfo);
+    	  
+      }else {
+    	  throw new PublisherNotFoundException("NO data Available");
+	}
+    	
+    	
     }
 
+    
     private PublisherInfoDTO convertToDTO(PublisherInfo publisherInfo) {
         PublisherInfoDTO publisherInfoDTO = new PublisherInfoDTO();
         publisherInfoDTO = copyProperties(publisherInfo, publisherInfoDTO);
