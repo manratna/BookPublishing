@@ -51,7 +51,10 @@ public class Title {
     @Column(name = "notes")
     private String notes;
 
-    @Column(name = "pubdate", nullable = false)
+    @Column(name = "pubdate")
     private String pubdate;
+    
+    @Column(name = "img_url")
+    private String imageURLString;
 
 }

@@ -19,11 +19,10 @@ public class TitleDTO {
     private Long id;
     
     @NotBlank
-    @Size(max = 255)
     private String title;
     
     @NotBlank
-    @Size(max = 50)
+    @Size(max = 80)
     private String type;
     
     @NotNull
@@ -45,11 +44,12 @@ public class TitleDTO {
     @Min(0)
     private Integer ytdSales;
     
-    @Size(max = 500)
     private String notes;
     
     @Pattern(regexp = "\\d{2}-\\d{2}-\\d{4}")
     private String pubdate;
+    
+    private String imageURLString;
     
 }
 
