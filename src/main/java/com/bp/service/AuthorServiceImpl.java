@@ -4,6 +4,7 @@ package com.bp.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
@@ -64,7 +65,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public AuthorDTO getAuthorByPhone(String phone) {
+    public AuthorDTO getAuthorsByPhone(String phone) {
         return convertToDTO(authorRepository.findByPhone(phone));
     }
 
@@ -100,13 +101,49 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public void partialUpdateAuthor(Long id, AuthorDTO authorDTO) {
-    	Author existingAuthor = authorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Author not found with id: " + id));
-
-        BeanUtils.copyProperties(authorDTO, existingAuthor);
-        authorRepository.save(existingAuthor);
-    }
+    public AuthorDTO partialUpdateAuthor(Long id, AuthorDTO authorDTO) {
+    	Optional<Author> authorOptional = authorRepository.findById(id);
+    	if(authorOptional.isPresent()) {
+    		Author author = authorOptional.get();
+    		
+    		if(authorDTO.getLastName()!= null) {
+    			author.setLastName(authorDTO.getLastName());
+    		
+    	    }
+    		
+    		if (authorDTO.getFirstName()!= null) {
+    			author.setFirstName(authorDTO.getFirstName());
+    		}
+    		
+    		if (authorDTO.getPhone() != null) {
+    			author.setPhone(authorDTO.getPhone());
+    		}
+    		
+    		if (authorDTO.getCity()!= null) {
+    			author.setAddress(authorDTO.getCity());
+    		}
+    		
+    		if (authorDTO.getState() != null) {
+    			author.setState(authorDTO.getState());
+    		}
+    		
+    		if (authorDTO.getAddress() !=null) {
+    			author.setAddress(authorDTO.getAddress());
+    		}
+    		
+    		if (authorDTO.getZip() !=null) {
+    			author.setAddress(authorDTO.getZip());
+    		}
+    		
+    		authorRepository.save(author);
+    		return convertToDTO(author);
+    	}else {
+    		throw new InValidDataException("InvalidData Exception");
+    	}
+    		
+    	}
+    			
+    	
 
     @Override
     public void updateAuthor(Long id, AuthorDTO authorDTO) {

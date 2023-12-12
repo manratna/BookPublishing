@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bp.model.AuthorDTO;
 import com.bp.service.AuthorService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/authors")
 public class AuthorController {
@@ -25,7 +27,7 @@ public class AuthorController {
     private AuthorService authorService;
 
     @PostMapping("/add")
-    public ResponseEntity<String> addAuthor(@RequestBody AuthorDTO authorDTO) {
+    public ResponseEntity<String> addAuthor(@Valid @RequestBody AuthorDTO authorDTO) {
         String response = authorService.addAuthor(authorDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -50,7 +52,7 @@ public class AuthorController {
 
     @GetMapping("/phone/{phno}")
     public ResponseEntity<AuthorDTO> getAuthorByPhone(@PathVariable String phno) {
-        AuthorDTO author = authorService.getAuthorByPhone(phno);
+        AuthorDTO author = authorService.getAuthorsByPhone(phno);
         return ResponseEntity.ok(author);
     }
 
@@ -73,13 +75,13 @@ public class AuthorController {
     }
 
     @PatchMapping("/update/{id}")
-    public ResponseEntity<Void> partialUpdateAuthor(@PathVariable Long id, @RequestBody AuthorDTO authorDTO) {
+    public ResponseEntity<Void> partialUpdateAuthor(@PathVariable Long id,  @RequestBody AuthorDTO authorDTO) {
         authorService.partialUpdateAuthor(id, authorDTO);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Void> updateAuthor(@PathVariable Long id, @RequestBody AuthorDTO authorDTO) {
+    public ResponseEntity<Void> updateAuthor(@PathVariable Long id,@Valid @RequestBody AuthorDTO authorDTO) {
         authorService.updateAuthor(id, authorDTO);
         return ResponseEntity.noContent().build();
     }
