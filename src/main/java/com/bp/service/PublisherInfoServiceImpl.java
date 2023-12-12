@@ -31,9 +31,10 @@ public class PublisherInfoServiceImpl implements PublisherInfoService {
             publisherInfoRepository.save(publisherInfo);
             return convertToDTO(publisherInfoRepository.getById(publisherInfoDTO.getId()));
     	}catch (Exception e) {
-        	throw new PublisherNotFoundException("NO data Available");
+        	throw new PublisherNotFoundException("Update failed");
         }
     }
+   
 
     @Override
     public PublisherInfoDTO partialUpdatePublisherInfo(Long id, PublisherInfoDTO publisherInfoDTO) {
