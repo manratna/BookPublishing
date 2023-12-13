@@ -52,7 +52,6 @@ class TitleAuthorServiceImplTest {
     private TitleAuthorDTO createSampleTitleAuthorDTO() {
         TitleAuthorDTO titleAuthorDTO = new TitleAuthorDTO();
         titleAuthorDTO.setId(1L);
-        titleAuthorDTO.setAuOrd(1);
         titleAuthorDTO.setRoyaltyPer(60);
 
         titleAuthorDTO.setTitle(createSampleTitleDTO());
@@ -64,7 +63,6 @@ class TitleAuthorServiceImplTest {
     private TitleAuthor createSampleTitleAuthor() {
         TitleAuthor titleAuthorEntity = new TitleAuthor();
         titleAuthorEntity.setId(1L);
-        titleAuthorEntity.setAuOrd(1);
         titleAuthorEntity.setRoyaltyPer(60);
 
         titleAuthorEntity.setTitle(createSampleTitleEntity());

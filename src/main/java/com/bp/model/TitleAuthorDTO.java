@@ -23,9 +23,6 @@ public class TitleAuthorDTO {
     @Valid
     private TitleDTO title;
 
-    @Positive(message = "Order should be a positive integer")
-    private Integer auOrd;
-
     @Positive(message = "Royalty percentage should be a positive integer")
     private Integer royaltyPer;
 

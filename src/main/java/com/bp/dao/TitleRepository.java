@@ -27,4 +27,9 @@ public interface TitleRepository extends JpaRepository<Title, Long> {
     List<Title> findByAuthorName(@Param("name") String name);
     
     List<Title> findTop5ByOrderByPriceDesc();
+    
+    List<Title> findByTitleContaining(String title);
+
+    List<Title> findByPubdateLike(String pubDate);
+    
 }

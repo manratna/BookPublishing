@@ -33,9 +33,6 @@ public class TitleAuthor {
     @JoinColumn(name = "title_id")
     private Title title;
 
-    @Column(name = "au_ord")
-    private Integer auOrd;
-
     @Column(name = "royaltyper")
     private Integer royaltyPer;
 }
