@@ -27,4 +27,8 @@ public interface TitleService {
     TitleDTO updateSpecificTitleDetails(Long id, TitleDTO titleDTO);
     
     List<TitleDTO> getTitlesByAuthorName(String Name);
+    
+    List<TitleDTO> searchTitlesByTitleContaining(String title);
+
+    List<TitleDTO> searchTitlesByPubDateLike(String pubDate);
 }

@@ -211,4 +211,28 @@ public class TitleServiceImpl implements TitleService {
         titleDTO.setPublisher(publisherDTO);
         return titleDTO;
     }
+
+    @Override
+    public List<TitleDTO> searchTitlesByTitleContaining(String title) {
+        List<Title> titles = titleRepository.findByTitleContaining(title);
+        List<TitleDTO> titleDTOs = titles.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+        if (titleDTOs.isEmpty()) {
+            throw new TitleNotFoundException("No titles available for the given title pattern");
+        }
+        return titleDTOs;
+    }
+
+    @Override
+    public List<TitleDTO> searchTitlesByPubDateLike(String pubDate) {
+        List<Title> titles = titleRepository.findByPubdateLike(pubDate);
+        List<TitleDTO> titleDTOs = titles.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+        if (titleDTOs.isEmpty()) {
+            throw new TitleNotFoundException("No titles available for the given publication date pattern");
+        }
+        return titleDTOs;
+    }
 }

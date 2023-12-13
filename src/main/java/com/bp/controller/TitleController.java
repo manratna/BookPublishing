@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,7 +19,8 @@ import com.bp.model.TitleDTO;
 import com.bp.service.TitleService;
 
 import jakarta.validation.Valid;
- 
+
+@CrossOrigin
 @RestController
 @RequestMapping("/api/titles")
 public class TitleController {
@@ -88,9 +90,21 @@ public class TitleController {
 		return new ResponseEntity<>(updateSpecificTitleDetails,HttpStatus.OK);
     }
     
-    @GetMapping("/authorLastName/{authorName}")
+    @GetMapping("/authorName/{authorName}")
     public ResponseEntity<List<TitleDTO>> getTitlesByAuthorName(@PathVariable String authorName) {
         List<TitleDTO> titles = titleService.getTitlesByAuthorName(authorName);
         return new ResponseEntity<>(titles, HttpStatus.OK);
+    }
+    
+    @GetMapping("/searchByTitleContaining/{title}")
+    public ResponseEntity<List<TitleDTO>> searchTitlesByTitleContaining(@PathVariable String title) {
+        List<TitleDTO> searchTitlesByTitleContaining = titleService.searchTitlesByTitleContaining(title);
+        return new ResponseEntity<>(searchTitlesByTitleContaining, HttpStatus.OK);
+    }
+
+    @GetMapping("/searchByPubDateLike/{pubDate}")
+    public ResponseEntity<List<TitleDTO>> searchTitlesByPubDateLike(@PathVariable String pubDate) {
+        List<TitleDTO> searchTitlesByPubDateLike = titleService.searchTitlesByPubDateLike(pubDate);
+        return new ResponseEntity<>(searchTitlesByPubDateLike, HttpStatus.OK);
     }
 }
