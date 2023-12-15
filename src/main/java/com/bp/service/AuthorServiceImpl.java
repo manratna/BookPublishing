@@ -1,5 +1,3 @@
-// AuthorServiceImpl.java
-
 package com.bp.service;
 
 import java.util.ArrayList;
