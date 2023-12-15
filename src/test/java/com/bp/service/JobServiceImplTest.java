@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.bp.dao.JobRepository;
 import com.bp.dao.entity.Job;
 import com.bp.dao.entity.Store;
+import com.bp.exception.NoDataAvailableException;
 import com.bp.model.JobDTO;
 @SpringBootTest
 class JobServiceImplTest {
@@ -92,12 +94,7 @@ class JobServiceImplTest {
            assertEquals(jobs.size(), result.size());
 
            assertEquals(result.get(0).getId(), jobs.get(0).getId());
-      
-           
-        
-       
-       
-    }
+       }
        @Test
        void testGetJobById() {
            Long jobIdToSearch = 1L;
@@ -108,16 +105,40 @@ class JobServiceImplTest {
 
            assertNotNull(result);
            assertEquals(job.getId(), result.getId());
- 
-     
+   }
+       
+       @Test
+       void testGetJobsByMinLevel() {
+           Integer minLevelToSearch = 3;
+           List<Job> expectedJobs = Arrays.asList(
+                   new Job(),
+                   new Job()
+           );
+           when(jobRepository.findByMinLevel(minLevelToSearch)).thenReturn(expectedJobs);
+           
+           List<JobDTO> result = jobServiceImpl.getJobsByMinLevel(minLevelToSearch);
+            assertEquals(expectedJobs.size(), result.size());
+           
        }
-    
+       @Test
+       void testGetJobsByMaxLevel() {
+           Integer maxLevelToSearch = 5;
+           List<Job> expectedJobs = Arrays.asList(
+                   new Job(),
+                   new Job()
+           );
+           when(jobRepository.findByMaxLevel(maxLevelToSearch)).thenReturn(expectedJobs);
+           List<JobDTO> result = jobServiceImpl.getJobsByMaxLevel(maxLevelToSearch);
+           assertEquals(expectedJobs.size(), result.size());
+          
+       }
+   }
+      
+
+   
     
     
 
-	@Test
-	void test() {
-		
-	}
+	
 
-}
+
