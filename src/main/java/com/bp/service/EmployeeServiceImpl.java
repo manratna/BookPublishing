@@ -12,6 +12,8 @@ import com.bp.dao.EmployeeRepository;
 import com.bp.dao.entity.Employee;
 import com.bp.dao.entity.Job;
 import com.bp.dao.entity.Publisher;
+import com.bp.exception.NoDataAvailableException;
+import com.bp.exception.NoEmployeeDataAvailableException;
 import com.bp.model.EmployeeDTO;
 import com.bp.model.JobDTO;
 import com.bp.model.PublisherDTO;
@@ -30,55 +32,79 @@ public class EmployeeServiceImpl implements EmployeeService {
          employeeRepository.save(employee);
          return "Record Created Successfully";
      } catch (Exception e) {
-         e.printStackTrace();
-         return "Error Creating Record";
+         throw new NoEmployeeDataAvailableException("Not null exception");
      }
  }
 
  @Override
- public List<EmployeeDTO> getAllEmployees() {
-     return employeeRepository.findAll().stream()
+ public List<EmployeeDTO> getAllEmployees() throws NoEmployeeDataAvailableException {
+      List<EmployeeDTO> collect = employeeRepository.findAll().stream()
              .map(this::convertToDTO)
              .collect(Collectors.toList());
+     if (collect.isEmpty()) {
+         throw new NoEmployeeDataAvailableException("No Employee Data Available");
+     }
+     return collect;
  }
 
  @Override
- public List<EmployeeDTO> getEmployeesById(Long id) {
-     return employeeRepository.findById(id)
+ public List<EmployeeDTO> getEmployeesById(Long id) throws NoEmployeeDataAvailableException{
+     List<EmployeeDTO> orElseGet = employeeRepository.findById(id)
              .map(employee -> List.of(convertToDTO(employee)))
              .orElseGet(List::of);
+     if (orElseGet.isEmpty()) {
+         throw new NoEmployeeDataAvailableException("No Employee Data Available");
+     }
+	return orElseGet;
  }
 
  @Override
- public List<EmployeeDTO> getEmployeesByPubId(Long pubId) {
-     return employeeRepository.findByPublisherId(pubId).stream()
+ public List<EmployeeDTO> getEmployeesByPubId(Long pubId) throws NoEmployeeDataAvailableException{
+     List<EmployeeDTO> collect = employeeRepository.findByPublisherId(pubId).stream()
              .map(this::convertToDTO)
              .collect(Collectors.toList());
+     if (collect.isEmpty()) {
+         throw new NoEmployeeDataAvailableException("No Employee Data Available");
+     }
+	return collect;
  }
 
  @Override
- public List<EmployeeDTO> getEmployeesByFirstName(String firstName) {
-     return employeeRepository.findByFirstName(firstName).stream()
+ public List<EmployeeDTO> getEmployeesByFirstName(String firstName)throws NoEmployeeDataAvailableException {
+     List<EmployeeDTO> collect = employeeRepository.findByFirstName(firstName).stream()
              .map(this::convertToDTO)
              .collect(Collectors.toList());
+     if (collect.isEmpty()) {
+         throw new NoEmployeeDataAvailableException("No Employee Data Available");
+     }
+	return collect;
+    
  }
 
  @Override
- public List<EmployeeDTO> getEmployeesByLastName(String lastName) {
-     return employeeRepository.findByLastName(lastName).stream()
+ public List<EmployeeDTO> getEmployeesByLastName(String lastName)throws NoEmployeeDataAvailableException {
+     List<EmployeeDTO> collect = employeeRepository.findByLastName(lastName).stream()
              .map(this::convertToDTO)
              .collect(Collectors.toList());
+     if (collect.isEmpty()) {
+         throw new NoEmployeeDataAvailableException("No Employee Data Available");
+     }
+	return collect;
  }
 
  @Override
- public List<EmployeeDTO> getEmployeesByHireDate(String hireDate) {
-     return employeeRepository.findByHireDate(hireDate).stream()
+ public List<EmployeeDTO> getEmployeesByHireDate(String hireDate) throws NoEmployeeDataAvailableException{
+     List<EmployeeDTO> collect = employeeRepository.findByHireDate(hireDate).stream()
              .map(this::convertToDTO)
              .collect(Collectors.toList());
+     if (collect.isEmpty()) {
+         throw new NoEmployeeDataAvailableException("No Employee Data Available");
+     }
+	return collect;
  }
 
  @Override
- public EmployeeDTO updateEmployee(Long id, EmployeeDTO employeeDTO) {
+ public EmployeeDTO updateEmployee(Long id, EmployeeDTO employeeDTO)throws NoEmployeeDataAvailableException {
      Optional<Employee> employeeOptional = employeeRepository.findById(id);
      if (employeeOptional.isPresent()) {
          Employee employee = employeeOptional.get();
@@ -86,16 +112,15 @@ public class EmployeeServiceImpl implements EmployeeService {
         	 employee = copyProperties(employeeDTO, employee);
              employeeRepository.save(employee);
              return convertToDTO(employee);
-         } catch (Exception e) {
-             e.printStackTrace();
-             // Handle the exception as needed
+         } catch (NoEmployeeDataAvailableException e) {
+        	 throw new NoEmployeeDataAvailableException("No Employee Data Available");
          }
      }
      return null;
  }
 
  @Override
- public EmployeeDTO partialUpdateEmployee(Long id, EmployeeDTO employeeDTO) {
+ public EmployeeDTO partialUpdateEmployee(Long id, EmployeeDTO employeeDTO) throws NoEmployeeDataAvailableException{
      Optional<Employee> employeeOptional = employeeRepository.findById(id);
      if (employeeOptional.isPresent()) {
          Employee employee = employeeOptional.get();
@@ -103,9 +128,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         	 employee = copyProperties(employeeDTO, employee);
              employeeRepository.save(employee);
              return convertToDTO(employee);
-         } catch (Exception e) {
-             e.printStackTrace();
-             // Handle the exception as needed
+         } catch (NoEmployeeDataAvailableException e) {
+        	 throw new NoEmployeeDataAvailableException("No Employee Data Available");
          }
      }
      return null;
@@ -118,24 +142,42 @@ public class EmployeeServiceImpl implements EmployeeService {
  }
 
  private Employee copyProperties(EmployeeDTO source, Employee target) {
-     BeanUtils.copyProperties(source, target);
-     Job job = new Job();
-     Publisher publisher = new Publisher();
-     BeanUtils.copyProperties(source.getJob(), job);
-     BeanUtils.copyProperties(source.getPublisher(), publisher);
-     target.setPublisher(publisher);
-     target.setJob(job);
-     return target;
- }
+	    if (source != null) {
+	        BeanUtils.copyProperties(source, target);
+
+	        if (source.getJob() != null) {
+	            Job job = new Job();
+	            BeanUtils.copyProperties(source.getJob(), job);
+	            target.setJob(job);
+	        }
+
+	        if (source.getPublisher() != null) {
+	            Publisher publisher = new Publisher();
+	            BeanUtils.copyProperties(source.getPublisher(), publisher);
+	            target.setPublisher(publisher);
+	        }
+	    }
+	    return target;
+	}
+
 
  private EmployeeDTO copyProperties(Employee source, EmployeeDTO target) {
-     BeanUtils.copyProperties(source, target);
-     JobDTO jobDTO = new JobDTO();
-     PublisherDTO publisherDTO = new PublisherDTO();
-     BeanUtils.copyProperties(source.getJob(), jobDTO);
-     BeanUtils.copyProperties(source.getPublisher(), publisherDTO);
-     target.setPublisher(publisherDTO);
-     target.setJob(jobDTO);
-     return target;
- }
+	    if (source != null) {
+	        BeanUtils.copyProperties(source, target);
+
+	        if (source.getJob() != null) {
+	            JobDTO jobDTO = new JobDTO();
+	            BeanUtils.copyProperties(source.getJob(), jobDTO);
+	            target.setJob(jobDTO);
+	        }
+
+	        if (source.getPublisher() != null) {
+	            PublisherDTO publisherDTO = new PublisherDTO();
+	            BeanUtils.copyProperties(source.getPublisher(), publisherDTO);
+	            target.setPublisher(publisherDTO);
+	        }
+	    }
+	    return target;
+	}
+
 }
