@@ -21,4 +21,6 @@ public interface StoreService {
     void updateStoreDetails(Long id, StoreDTO storeDTO);
 
     void updateWholeStoreInfo(Long id, StoreDTO storeDTO);
+
+	void partialUpdateStore(Long id, StoreDTO storeDTO);
 }
