@@ -24,9 +24,7 @@ public class TitleAuthorController {
     private TitleAuthorService titleAuthorService;
 
     @PostMapping("/post")
-    public ResponseEntity<String> addNewTitleAuthor(@Valid @RequestBody TitleAuthorDTO titleAuthorDTO) {
-            String response = titleAuthorService.addNewTitleAuthor(titleAuthorDTO);
-            return new ResponseEntity<String>(response, HttpStatus.CREATED);
-        
+    public void addNewTitleAuthor(@Valid @RequestBody TitleAuthorDTO titleAuthorDTO) {
+            String response = titleAuthorService.addNewTitleAuthor(titleAuthorDTO);        
     }
 }
