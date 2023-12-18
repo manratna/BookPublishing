@@ -19,7 +19,7 @@ import com.bp.model.PublisherDTO;
 import com.bp.service.PublisherService;
 
 import jakarta.validation.Valid;
- 
+
 @CrossOrigin()
 @RestController
 @RequestMapping("/api/publishers")
@@ -86,4 +86,6 @@ public class PublisherController {
 		return new ResponseEntity<PublisherDTO>(updatePublisher, HttpStatus.ACCEPTED);
 	}
  
+	
+	
 }
