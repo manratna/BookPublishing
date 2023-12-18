@@ -14,7 +14,6 @@ public class SaleDTO {
 	
 	@NotNull
     private StoreDTO store;
-	@NotNull
     private Long orderNumber;
 	@NotNull
     private String orderDate;
