@@ -19,7 +19,7 @@ import com.bp.model.StoreDTO;
 import com.bp.service.StoreService;
 
 import jakarta.validation.Valid;
-
+@CrossOrigin(origins ="http://localhost:4200/")
 @RestController
 @CrossOrigin
 @RequestMapping("/api/stores")
@@ -71,8 +71,8 @@ public class StoreController {
 
     @PatchMapping("/update/{id}")
     public ResponseEntity<Void> updateStoreDetails(@PathVariable Long id, @RequestBody StoreDTO storeDTO) {
-        storeService.updateStoreDetails(id, storeDTO);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        storeService.partialUpdateStore(id, storeDTO);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/update/{id}")
