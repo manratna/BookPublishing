@@ -1,5 +1,5 @@
 package com.bp.controller;
-
+ 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,61 +19,67 @@ import com.bp.model.EmployeeDTO;
 import com.bp.service.EmployeeServiceImpl;
 
 import jakarta.validation.Valid;
-
-
+ 
 @CrossOrigin
 @RestController
 @RequestMapping("/api/employees")
 public class EmployeeController {
+    @Autowired
+    private EmployeeServiceImpl employeeService;
+ 
+    @PostMapping("/post")
+    public ResponseEntity<String> addEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
+        String addNewEmployee = employeeService.addEmployee(employeeDTO);
+        return new ResponseEntity<>(addNewEmployee, HttpStatus.OK);
+    }
+ 
+    @GetMapping
+    public ResponseEntity<List<EmployeeDTO>> getAllEmployees() {
+        List<EmployeeDTO> employees = employeeService.getAllEmployees();
+        return new ResponseEntity<>(employees, HttpStatus.OK);
+    }
+ 
+    @GetMapping("/{id}")
+    public ResponseEntity<List<EmployeeDTO>> getEmployeesById(@PathVariable("id") Long id) {
+        List<EmployeeDTO> employees = employeeService.getEmployeesById(id);
+        return new ResponseEntity<>(employees, HttpStatus.OK);
+    }
+ 
+    @GetMapping("/pubid/{pubid}")
+    public ResponseEntity<List<EmployeeDTO>> getEmployeesByPubId(@PathVariable Long pubid) {
+        List<EmployeeDTO> employees = employeeService.getEmployeesByPubId(pubid);
+        return new ResponseEntity<>(employees, HttpStatus.OK);
+    }
+ 
+    @GetMapping("/fname/{fname}")
+    public ResponseEntity<List<EmployeeDTO> >getEmployeeByFirstName(@PathVariable String fname) {
+        List<EmployeeDTO> employee = employeeService.getEmployeesByFirstName(fname);
+        return new ResponseEntity<>(employee, HttpStatus.OK);
+        } 
 
- @Autowired
- private EmployeeServiceImpl employeeService;
-
- @PostMapping("/post")
- public ResponseEntity<String> addEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
-	  String addNewEmployee = employeeService.addEmployee(employeeDTO);
-	    return new ResponseEntity<String>(addNewEmployee, HttpStatus.CREATED);
-
- }
-
- @GetMapping
- public List<EmployeeDTO> getAllEmployees() {
-     return employeeService.getAllEmployees();
- }
-
- @GetMapping("/{id}")
- public List<EmployeeDTO> getEmployeesById(@PathVariable Long id) {
-     return employeeService.getEmployeesById(id);
- }
-
- @GetMapping("/pubid/{pubid}")
- public List<EmployeeDTO> getEmployeesByPubId(@PathVariable Long pubid) {
-     return employeeService.getEmployeesByPubId(pubid);
- }
-
- @GetMapping("/fname/{fname}")
- public List<EmployeeDTO> getEmployeesByFirstName(@PathVariable String fname) {
-     return employeeService.getEmployeesByFirstName(fname);
- }
-
- @GetMapping("/lname/{lname}")
- public List<EmployeeDTO> getEmployeesByLastName(@PathVariable String lname) {
-     return employeeService.getEmployeesByLastName(lname);
- }
-
- @GetMapping("/hiredate/{hiredate}")
- public List<EmployeeDTO> getEmployeesByHireDate(@PathVariable String hiredate) {
-     return employeeService.getEmployeesByHireDate(hiredate);
- }
-
- @PutMapping("/{id}")
- public ResponseEntity<EmployeeDTO> updateEmployee(@PathVariable Long id,@Valid @RequestBody EmployeeDTO employeeDTO) {
-	 EmployeeDTO updatedEmployee = employeeService.updateEmployee(id, employeeDTO);
-	 return new ResponseEntity<>(updatedEmployee, HttpStatus.OK);
- }
-
- @PatchMapping("/{id}")
- public EmployeeDTO partialUpdateEmployee(@PathVariable Long id, @RequestBody EmployeeDTO employeeDTO) {
-     return employeeService.partialUpdateEmployee(id, employeeDTO);
- }
+ 
+ 
+    @GetMapping("/lname/{lname}")
+    public ResponseEntity<List<EmployeeDTO>> getEmployeesByLastName(@PathVariable String lname) {
+        List<EmployeeDTO> employees = employeeService.getEmployeesByLastName(lname);
+        return new ResponseEntity<>(employees, HttpStatus.OK);
+    }
+ 
+    @GetMapping("/hiredate/{hiredate}")
+    public ResponseEntity<List<EmployeeDTO>> getEmployeesByHireDate(@PathVariable String hiredate) {
+        List<EmployeeDTO> employees = employeeService.getEmployeesByHireDate(hiredate);
+        return new ResponseEntity<>(employees, HttpStatus.OK);
+    }
+ 
+    @PutMapping("/{id}")
+    public ResponseEntity<EmployeeDTO> updateEmployee(@PathVariable Long id, @Valid @RequestBody EmployeeDTO employeeDTO) {
+        EmployeeDTO updatedEmployee = employeeService.updateEmployee(id, employeeDTO);
+        return new ResponseEntity<>(updatedEmployee, HttpStatus.OK);
+    }
+ 
+    @PatchMapping("/{id}")
+    public ResponseEntity<EmployeeDTO> partialUpdateEmployee(@PathVariable Long id, @RequestBody EmployeeDTO employeeDTO) {
+        EmployeeDTO updatedEmployee = employeeService.partialUpdateEmployee(id, employeeDTO);
+        return new ResponseEntity<>(updatedEmployee, HttpStatus.OK);
+    }
 }
