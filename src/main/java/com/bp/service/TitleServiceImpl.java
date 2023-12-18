@@ -26,7 +26,7 @@ public class TitleServiceImpl implements TitleService {
     @Autowired
     private PublisherRepository publisherRepository;
     @Override
-    public String addNewTitle(TitleDTO titleDTO) {
+    public TitleDTO addNewTitle(TitleDTO titleDTO) {
         Title title = new Title();
         BeanUtils.copyProperties(titleDTO, title);
         Publisher publisher = new Publisher();
@@ -34,8 +34,8 @@ public class TitleServiceImpl implements TitleService {
         title.setPublisher(publisher);
 
         try {
-            titleRepository.save(title);
-            return "Record Created Successfully";
+            titleRepository.saveAndFlush(title);
+            return convertToDTO(title);
         } catch (Exception e) {
             throw new TitleNotFoundException("Error Creating Record");
         }
@@ -212,21 +212,10 @@ public class TitleServiceImpl implements TitleService {
         return titleDTO;
     }
 
-    @Override
-    public List<TitleDTO> searchTitlesByTitleContaining(String title) {
-        List<Title> titles = titleRepository.findByTitleContaining(title);
-        List<TitleDTO> titleDTOs = titles.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-        if (titleDTOs.isEmpty()) {
-            throw new TitleNotFoundException("No titles available for the given title pattern");
-        }
-        return titleDTOs;
-    }
 
     @Override
     public List<TitleDTO> searchTitlesByPubDateLike(String pubDate) {
-        List<Title> titles = titleRepository.findByPubdateLike(pubDate);
+        List<Title> titles = titleRepository.findByPubdateContainingYear(pubDate);
         List<TitleDTO> titleDTOs = titles.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());

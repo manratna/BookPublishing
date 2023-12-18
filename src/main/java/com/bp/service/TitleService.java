@@ -6,7 +6,7 @@ import com.bp.model.TitleDTO;
 
 public interface TitleService {
 
-    String addNewTitle(TitleDTO titleDTO);
+	TitleDTO addNewTitle(TitleDTO titleDTO);
 
     List<TitleDTO> getAllTitles();
 
@@ -28,7 +28,5 @@ public interface TitleService {
     
     List<TitleDTO> getTitlesByAuthorName(String Name);
     
-    List<TitleDTO> searchTitlesByTitleContaining(String title);
-
     List<TitleDTO> searchTitlesByPubDateLike(String pubDate);
 }

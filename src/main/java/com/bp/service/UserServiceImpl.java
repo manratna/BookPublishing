@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.bp.dao.UserRepository;
 import com.bp.dao.entity.User;
+import com.bp.model.AuthDTO;
 import com.bp.model.UserDTO;
 
 @Service
@@ -13,19 +14,25 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+	JwtService jwtService;
 
     @Override
-    public UserDTO authenticateUser(UserDTO userDTO) {
+    public AuthDTO authenticateUser(UserDTO userDTO) {
+    	AuthDTO authDTO = new AuthDTO();
         User fetchedUser = userRepository.findByUserNameAndUserPassword(userDTO.getUserName(),userDTO.getUserPassword());
 
         if (fetchedUser!=null) {
             userDTO.setUserId(fetchedUser.getUserId());
             userDTO.setRole(fetchedUser.getRole());
+            authDTO.setUserDTO(userDTO);
+            authDTO.setToken(jwtService.generateToken(userDTO));
         } else {
             throw new RuntimeException("Invalid Username/password!");
         }
 
-        return userDTO;
+        return authDTO;
     }
 
 	@Override

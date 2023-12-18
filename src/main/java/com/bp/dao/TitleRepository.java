@@ -28,8 +28,7 @@ public interface TitleRepository extends JpaRepository<Title, Long> {
     
     List<Title> findTop5ByOrderByPriceDesc();
     
-    List<Title> findByTitleContaining(String title);
-
-    List<Title> findByPubdateLike(String pubDate);
+    @Query("SELECT t FROM Title t WHERE t.pubdate LIKE %:year%")
+    List<Title> findByPubdateContainingYear(@Param("year") String year);
     
 }

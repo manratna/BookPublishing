@@ -30,9 +30,9 @@ public class TitleController {
  
  
     @PostMapping("/post")
-    public ResponseEntity<String> addNewTitle(@Valid @RequestBody TitleDTO titleDTO) {
-        String addNewTitle = titleService.addNewTitle(titleDTO);
-		return new ResponseEntity<String>(addNewTitle, HttpStatus.CREATED);
+    public ResponseEntity<TitleDTO> addNewTitle(@Valid @RequestBody TitleDTO titleDTO) {
+    	TitleDTO addNewTitle = titleService.addNewTitle(titleDTO);
+		return new ResponseEntity<TitleDTO>(addNewTitle, HttpStatus.CREATED);
     }
  
     @GetMapping
@@ -96,11 +96,6 @@ public class TitleController {
         return new ResponseEntity<>(titles, HttpStatus.OK);
     }
     
-    @GetMapping("/searchByTitleContaining/{title}")
-    public ResponseEntity<List<TitleDTO>> searchTitlesByTitleContaining(@PathVariable String title) {
-        List<TitleDTO> searchTitlesByTitleContaining = titleService.searchTitlesByTitleContaining(title);
-        return new ResponseEntity<>(searchTitlesByTitleContaining, HttpStatus.OK);
-    }
 
     @GetMapping("/searchByPubDateLike/{pubDate}")
     public ResponseEntity<List<TitleDTO>> searchTitlesByPubDateLike(@PathVariable String pubDate) {
