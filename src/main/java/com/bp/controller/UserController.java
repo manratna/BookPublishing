@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bp.model.AuthDTO;
 import com.bp.model.UserDTO;
 import com.bp.service.UserService;
 
@@ -19,7 +20,7 @@ public class UserController {
 	UserService userService;
 	
 	@PostMapping("/login")
-	public UserDTO authenticateUser(@RequestBody UserDTO userDTO) {
+	public AuthDTO authenticateUser(@RequestBody UserDTO userDTO) {
 		return userService.authenticateUser(userDTO);
 	}
 	

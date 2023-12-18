@@ -7,11 +7,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class AuthorDTO {
 
 	@NotNull
@@ -26,7 +28,6 @@ public class AuthorDTO {
     private String firstName;
 	
 	@NotNull
-	@Size(max = 10)
     private String phone;
 	
 	@NotBlank

@@ -1,11 +1,13 @@
 package com.bp.service;
-
+ 
+import java.util.List;
 import java.util.Optional;
-
+import java.util.stream.Collectors;
+ 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+ 
 import com.bp.dao.PublisherInfoRepository;
 import com.bp.dao.PublisherRepository;
 import com.bp.dao.entity.Publisher;
@@ -13,16 +15,23 @@ import com.bp.dao.entity.PublisherInfo;
 import com.bp.exception.PublisherNotFoundException;
 import com.bp.model.PublisherDTO;
 import com.bp.model.PublisherInfoDTO;
-
+ 
 @Service
 public class PublisherInfoServiceImpl implements PublisherInfoService {
-
+ 
     @Autowired
     private PublisherInfoRepository publisherInfoRepository;
-
+ 
     @Autowired
     private PublisherRepository publisherRepository;
-    
+    @Override
+	public List<PublisherInfoDTO> getAllPublishersInfo() {
+    	List<PublisherInfoDTO> collect = publisherInfoRepository.findAll().stream().map(this::convertToDTO).collect(Collectors.toList());
+		if (collect.isEmpty()) {
+			throw new PublisherNotFoundException("NO data Available");
+		}
+		return collect;
+    }
     @Override
     public PublisherInfoDTO updatePublisherInfo( PublisherInfoDTO publisherInfoDTO) {
     	try {
@@ -34,19 +43,16 @@ public class PublisherInfoServiceImpl implements PublisherInfoService {
         	throw new PublisherNotFoundException("Update failed");
         }
     }
-   
 
+ 
     @Override
     public PublisherInfoDTO partialUpdatePublisherInfo(Long id, PublisherInfoDTO publisherInfoDTO) {
-    	
       Optional<PublisherInfo> publisherInfoOptional = publisherInfoRepository.findById(id);
       if(publisherInfoOptional.isPresent()) {
     	  PublisherInfo publisherInfo=publisherInfoOptional.get();
-    	  
     	  if(publisherInfoDTO.getId()!=null) {
     		  publisherInfo.setId(publisherInfoDTO.getId());
     	  }
-    	  
     	  if (publisherInfoDTO.getPublisher() !=null && publisherInfoDTO.getPublisher().getId()!=null) {
 			Optional<Publisher> optional=publisherRepository.findById(publisherInfoDTO.getPublisher().getId());
 			if (optional.isPresent()) {
@@ -58,28 +64,24 @@ public class PublisherInfoServiceImpl implements PublisherInfoService {
     	  if(publisherInfoDTO.getLogo()!=null) {
     		  publisherInfo.setLogo(publisherInfoDTO.getLogo());;
     	  }
-    	  
     	  if(publisherInfoDTO.getPrInfo()!=null) {
     		  publisherInfo.setPrInfo(publisherInfoDTO.getPrInfo());
     	  }
-    	  
     	  publisherInfoRepository.save(publisherInfo);
     	  return convertToDTO(publisherInfo);
-    	  
       }else {
     	  throw new PublisherNotFoundException("NO data Available");
 	}
-    	
-    	
-    }
 
+    }
+ 
     
     private PublisherInfoDTO convertToDTO(PublisherInfo publisherInfo) {
         PublisherInfoDTO publisherInfoDTO = new PublisherInfoDTO();
         publisherInfoDTO = copyProperties(publisherInfo, publisherInfoDTO);
         return publisherInfoDTO;
     }
-
+ 
     private PublisherInfo copyProperties(PublisherInfoDTO source, PublisherInfo target) {
         BeanUtils.copyProperties(source, target);
         Publisher publisher = new Publisher();
@@ -87,7 +89,7 @@ public class PublisherInfoServiceImpl implements PublisherInfoService {
         target.setPublisher(publisher);
         return target;
     }
-
+ 
     private PublisherInfoDTO copyProperties(PublisherInfo source, PublisherInfoDTO target) {
         BeanUtils.copyProperties(source, target);
         PublisherDTO publisherDTO = new PublisherDTO();
@@ -95,4 +97,7 @@ public class PublisherInfoServiceImpl implements PublisherInfoService {
         target.setPublisher(publisherDTO);
         return target;
     }
+ 
+ 
+	
 }

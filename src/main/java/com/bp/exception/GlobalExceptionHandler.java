@@ -1,19 +1,22 @@
 package com.bp.exception;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
 	
@@ -71,4 +74,13 @@ public class GlobalExceptionHandler {
         ErrorDetails errorDetails = new ErrorDetails(dateTime, ex.getMessage());
         return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+    
+    @ExceptionHandler(JwtException.class)
+	protected ResponseEntity<Object> handleJwtException(JwtException nb){
+		Map<String, Object> error = new HashMap<String, Object>();
+		error.put("errorCode", 301);
+		error.put("timestamp", LocalDateTime.now());
+		error.put("errorMessage", nb.getMessage());
+		return ResponseEntity.badRequest().body(error);
+	}
 }

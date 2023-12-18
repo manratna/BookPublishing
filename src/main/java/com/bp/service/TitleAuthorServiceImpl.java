@@ -19,8 +19,9 @@ public class TitleAuthorServiceImpl implements TitleAuthorService {
 
  @Override
  public String addNewTitleAuthor(TitleAuthorDTO titleAuthorDTO) {
+	 System.out.println(titleAuthorDTO);
      TitleAuthor titleAuthor = new TitleAuthor();
-     BeanUtils.copyProperties(titleAuthorDTO, titleAuthor);
+     titleAuthor.setRoyaltyPer(titleAuthorDTO.getRoyaltyPer());
      Title title = new Title();
      BeanUtils.copyProperties(titleAuthorDTO.getTitle(), title);
           titleAuthor.setTitle(title);
